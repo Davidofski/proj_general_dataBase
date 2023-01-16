@@ -2,8 +2,8 @@ import dearpygui.dearpygui as dpg
 
 dpg.create_context()
 
-dpg.show_documentation()
-#dpg.show_style_editor()
+#dpg.show_documentation()
+dpg.show_style_editor()
 #dpg.show_debug()
 #dpg.show_about()
 #dpg.show_metrics()
