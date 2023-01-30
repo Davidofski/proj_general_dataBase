@@ -14,7 +14,7 @@ window1_ypos = 0
 window2_heigh = 430
 window2_width = ui_width - 6
 window2_xpos = 0
-window2_ypos = 370
+window2_ypos = 300
 
 # item locations
 item_xpos_offset = 50

@@ -120,7 +120,7 @@ while dpg.is_dearpygui_running():
 dpg.destroy_context()
 
 # OPEN POINTS:
-#  -timeStamp not shown in UI
 #  -lastTimeChange int to date  db_dslc!!!!!
 #  -make a file status field
 #  -set a window with date difference
+#  -max entry does count from first line
