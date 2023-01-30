@@ -1,23 +1,17 @@
-import dearpygui.dearpygui as dpg
+from datetime import datetime
+import settings as st
 
-dpg.create_context()
+x_datetime = datetime.now()
+print("x_datetime:", x_datetime)
 
-def button_callback(sender, app_data, user_data):
-    print(f"sender is: {sender}")
-    print(f"app_data is: {app_data}")
-    print(f"user_data is: {user_data}")
+x_date = x_datetime.replace(microsecond=0, second=0, minute=0, hour=0)
+print("x_date: ", x_date)
 
-with dpg.window(label="Tutorial"):
-    # user data and callback set when button is created
-    dpg.add_button(label="Apply", callback=button_callback, user_data="Some Data")
+x_date = x_date.date()
+print("x_date after change:", x_date)
 
-    # user data and callback set any time after button has been created
-    btn = dpg.add_button(label="Apply 2", )
-    dpg.set_item_callback(btn, button_callback)
-    dpg.set_item_user_data(btn, "Some Extra User Data")
+y = st.item1_xpos
+print(y)
 
-dpg.create_viewport(title='Custom Title', width=800, height=600)
-dpg.setup_dearpygui()
-dpg.show_viewport()
-dpg.start_dearpygui()
-dpg.destroy_context()
+input_date = {'sec': 0, 'min': 0, 'hour': 0, 'month_day': 1, 'month': 0, 'year': 122, 'week_day': 6, 'year_day': 0, 'daylight_savings': 0}
+print("From input date [year]: ", input_date['year'])
