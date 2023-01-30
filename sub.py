@@ -97,13 +97,6 @@ def saveClicked(db_platform, db_email, db_pw, db_lastTimeChange, db_addInfo):
         print("DEBUG    saveClicked() entryTime:", entryTime)
         db_entryTimeStamp = entryTime.replace(microsecond=0)
 
-        print("[DEBUG]  before dataframe:\ncontainer1: ", db_id)
-        print("Container2: ", db_platform)
-        print("Container3: ", db_email)
-        print("Container4: ", db_pw)
-        print("Container5: ", db_lastTimeChange_f)
-        print("Container6: ", db_addInfo)
-        print("Container7: ", db_dslc)
         f = {"platform" : db_platform, "email" : db_email, "password" : db_pw, "last time changed" : db_lastTimeChange_f, "additional information" : db_addInfo, "DSLC" : db_dslc} # , "days slc" : db_dslc
         print("[INFO]   dataframe:\n", f)
         db_new = pd.DataFrame(f) # , index=db_id)

@@ -3,6 +3,7 @@ import sub
 import settings as st
 import rendering as rd
 
+# create emtply list container
 db_platform = []
 db_email = []
 db_pw = []
@@ -12,11 +13,14 @@ db = {}
 table_1stUpdate = False
 table_updateClicked = False
 
+# filename used to create and read file into dataframe
 db_fileName = "DB_PW.csv"
 
 def saveClicked():
     global db, db_fileName
 
+    # append new list item into container | in this proj always only one item per container
+    # container will be cleared after use
     db_platform.append(dpg.get_value(iField_platform))
     db_email.append(dpg.get_value(iField_email))
     db_pw.append(dpg.get_value(iField_pw))
@@ -26,10 +30,11 @@ def saveClicked():
     print("DEBUG    date picker value: ", db_lastTimeChange)
 
     # run subroutine to save data to frame and in .cvs file
+    # returns message about sucess
     sC_return = sub.saveClicked(db_platform, db_email, db_pw, db_lastTimeChange, db_addInfo)
     print(sC_return)
 
-    # empty containers
+    # clear containers after use in sub.saveClicked
     db_platform.clear()
     db_email.clear()
     db_pw.clear()
@@ -38,6 +43,7 @@ def saveClicked():
     print("db-Containers cleared?:", db_email)
 
     # update after save has been clicked to refresh table 1
+    # tabke one will always show the complete frame from loaded csv file
     updateClicked()
 
 def updateClicked():
@@ -124,3 +130,4 @@ dpg.destroy_context()
 #  -make a file status field
 #  -set a window with date difference
 #  -max entry does count from first line
+#  [BUG]: when creating first not default line db_id == 0 (should be 1)
