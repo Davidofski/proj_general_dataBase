@@ -4,34 +4,29 @@ import os
 
 db_fileName = "DB_PW.csv"
 
+error_code = 0
+
 # set taday_0 to today's raw date format
 today_0 = datetime.now()
 
 def readFile():
     print("[FUNCTION]   rd.readFile()")
-    global db_loaded
+    global db_loaded, error_code
     error_code = 0
     try:
         path = (r"C:\Users\david\OneDrive\Dokumenter\GitHub\DB_PW.csv")
         path_exists = os.path.isfile(path)    # check if path and file existant
+        
         if path_exists:
             db_loaded = pd.read_csv(path, sep=";", index_col=[0])
             print("existing db: ")
             print(db_loaded)
-            error_code = 1
-            error_message = "File existing, but CAN'T be read"
-
         else:
-            error_code = 2
-            error_message = "File or path not existant."
-
-        error_code = 0
+            error_code = 3
 
     except:
-        db_fileExists = False
         db_loaded = {}
-        error_code = 3
-        error_message = "Failure at loading file."
+        error_code = 2
 
     # return error_code, error_message
 def formating(db_lastTimeChange):
@@ -72,7 +67,7 @@ def dslc():
     print("[FUNCTION]   rd.dslc()")
     # !! need for condition that 1st line won't be altered
     readFile()
-    global db_loaded
+    global db_loaded, error_code
 
     try:
         dslc_date = db_loaded['last time changed']
@@ -93,8 +88,7 @@ def dslc():
         db_loaded.to_csv('%s' %db_fileName, sep=";")
 
     except:
-        text = 'UNEXPECTED ERROR - Failure formating: days since last change in %s' %db_fileName
-        print(text)
+        error_code = 4
 
 def calc_dslc(past_year, past_month, past_day):
     print("[FUNCTION]   rd.calc_dslc")
@@ -111,7 +105,3 @@ def calc_dslc(past_year, past_month, past_day):
     diff_days = str(diff_year*365 + diff_month*30 + diff_day)
 
     return diff_days
-
-# only for testing
-# readFile()
-# dslc()

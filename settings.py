@@ -4,6 +4,10 @@
 ui_width = 1000
 ui_heigh = 800
 
+# user interface for failure message
+uifm_width = 600
+uifm_heigh = 200
+
 # window 1 dimentions
 window1_heigh = 300
 window1_width = ui_width - 6

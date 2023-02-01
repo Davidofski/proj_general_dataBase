@@ -43,7 +43,7 @@ def readFile():
 
 def updateClicked():
     print("[FUNCTION]   sub.updateClicked()")
-    global db_fileExists, db_loaded
+    global db_fileExists, db_loaded, error_code
     table_content = db_loaded
     return table_content
 
@@ -90,10 +90,5 @@ def saveClicked(db_platform, db_email, db_pw, db_lastTimeChange, db_addInfo):
             db_loaded = db_new
             db_fileExists = True
 
-        text = "saving was successfull"
-
     except:
-        text = "saving was NOT successfull"
-
-    return text
-
+        error_code = 2

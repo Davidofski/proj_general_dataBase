@@ -2,6 +2,7 @@ import dearpygui.dearpygui as dpg
 import sub
 import settings as st
 import rendering as rd
+import errormessage as erm
 
 # create emtply list container
 db_platform = []
@@ -16,6 +17,11 @@ table_updateClicked = False
 # filename used to create and read file into dataframe
 db_fileName = "DB_PW.csv"
 
+def handOverErrorCode():
+    error_code = sub.error_code
+    error_code_rd = rd.error_code
+    return error_code, error_code_rd
+    
 def saveClicked():
     global db, db_fileName
 
@@ -28,9 +34,7 @@ def saveClicked():
     db_addInfo.append(dpg.get_value(iField_addInfo))
 
     # run subroutine to save data to frame and in .cvs file
-    # returns message about sucess
-    sC_return = sub.saveClicked(db_platform, db_email, db_pw, db_lastTimeChange, db_addInfo)
-    print(sC_return)
+    sub.saveClicked(db_platform, db_email, db_pw, db_lastTimeChange, db_addInfo)
 
     # clear containers after use in sub.saveClicked
     db_platform.clear()
@@ -75,9 +79,7 @@ with dpg.window(label="'%s' MANIPULATION" %db_fileName, width=st.window1_width, 
     if error_code == 0:
         w1_text1 = dpg.add_text("Reading in of file was sucessfull!", pos=(st.item2_xpos, st.item2_ypos))
     if error_code == 1:
-        w1_text3 = dpg.add_text("!!Error 1: %s" %error_message, color=[255,0,0], pos=(st.item3_xpos, st.item3_ypos))
-    if error_code == 2:
-        w1_text3 = dpg.add_text("!!Error 2: %s" %error_message, color=[255,0,0], pos=(st.item3_xpos, st.item3_ypos))
+        w1_text3 = dpg.add_text("!!Error 1: File could NOT be found!\nNew file has been created.", color=[255,0,0], pos=(st.item3_xpos, st.item3_ypos))
 
     # Window 1 input fields
     iField_platform = dpg.add_input_text(label="platform [str]", hint='e.g. gmail or facebook', pos=(st.item4_xpos, st.item4_ypos), height=st.iField_heigh, width=st.iField_width)
@@ -123,6 +125,10 @@ while dpg.is_dearpygui_running():
         dpg.delete_item("content")
         updateWindow()
         table_updateClicked = False
+
+        if error_code > 0:
+            #os.startfile(r"C:\Users\david\OneDrive\Dokumenter\GitHub\proj_general_dataBase\errormessage.py")
+            # erm.errorMessage()
 
     dpg.render_dearpygui_frame()
 
