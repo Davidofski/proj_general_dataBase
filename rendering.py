@@ -1,7 +1,6 @@
 import pandas as pd
 from datetime import datetime
 import os
-import sub
 
 db_fileName = "DB_PW.csv"
 
@@ -9,15 +8,12 @@ db_fileName = "DB_PW.csv"
 today_0 = datetime.now()
 
 def readFile():
-    print("INFO     readFile()")
+    print("[FUNCTION]   rd.readFile()")
     global db_loaded
     error_code = 0
     try:
         path = (r"C:\Users\david\OneDrive\Dokumenter\GitHub\DB_PW.csv")
-
-        x = os.path.isfile(path)    # check if path and file existant
-        path_exists = x
-
+        path_exists = os.path.isfile(path)    # check if path and file existant
         if path_exists:
             db_loaded = pd.read_csv(path, sep=";", index_col=[0])
             print("existing db: ")
@@ -39,13 +35,12 @@ def readFile():
 
     # return error_code, error_message
 def formating(db_lastTimeChange):
-    print("INFO     formating()")
+    print("[FUNCTION]   rd.formating()")
 
     # formating of date
     newContainer = {}
     newContainer = db_lastTimeChange[0]
     
-    print('DEBUG 0')
     # compenasate lybrary error
     year = newContainer['year'] - 100   # -100: BUG which you need to compensate
     month = newContainer['month'] + 1   # +1 as return for Jan is 0
@@ -74,42 +69,27 @@ def formating(db_lastTimeChange):
     return db_lastTimeChange_f, diff_days
 
 def dslc():
-
+    print("[FUNCTION]   rd.dslc()")
     # !! need for condition that 1st line won't be altered
-
-    print("INFO     dslc()")
     readFile()
     global db_loaded
-    print("[INFO]   dslc()")
 
     try:
-        dslc_before = db_loaded['DSLC']
-        print("DEBUG    days since last change before renderign: ", dslc_before)
         dslc_date = db_loaded['last time changed']
-        print("DEBUG    date since last change: ", dslc_date)
 
         x = 0
-        dslc_after = {}
-        for i in dslc_before:
-            print("DEBUG    i: ", i)
-            print("DEBUG    dslc date: ", dslc_date[x])
-            
+        for i in dslc_date:       
             date = str(dslc_date[x])
-            print("DEBUG    dslc(); date:", date)
             year = int(date[8:10])
             month = int(date[3:5])
             day = int(date[:2])
-            print("DEBUG    day, month, year: ", day, month, year)
 
             diff_days = calc_dslc(year, month, day)
 
             if x > 0:
                 db_loaded.loc[[x], ['DSLC']] = diff_days
-                print("DEBUG    dscl()  dslc_after:", db_loaded)
-                print("x= ", x)
             x = x + 1
 
-        print('db_loaded:\n', db_loaded)
         db_loaded.to_csv('%s' %db_fileName, sep=";")
 
     except:
@@ -117,13 +97,12 @@ def dslc():
         print(text)
 
 def calc_dslc(past_year, past_month, past_day):
-    print("INFO     calc_dslc")
+    print("[FUNCTION]   rd.calc_dslc")
     global today_0
 
     today_year = int(today_0.strftime("%y"))
-    today_month = int(today_0.strftime("%m"))
+    today_month = int(today_0.strftime("%m")) 
     today_day = int(today_0.strftime("%d"))
-    print("DEBUG    today_raw: [d,m,y] ", today_day, today_month, today_year)
 
     diff_year = today_year - past_year
     diff_month = today_month - past_month
@@ -131,7 +110,6 @@ def calc_dslc(past_year, past_month, past_day):
 
     diff_days = str(diff_year*365 + diff_month*30 + diff_day)
 
-    print("DEBUG    diff:   ", diff_days)
     return diff_days
 
 # only for testing

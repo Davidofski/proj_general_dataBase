@@ -27,8 +27,6 @@ def saveClicked():
     db_lastTimeChange.append(dpg.get_value(iField_lastTimeChange))
     db_addInfo.append(dpg.get_value(iField_addInfo))
 
-    print("DEBUG    date picker value: ", db_lastTimeChange)
-
     # run subroutine to save data to frame and in .cvs file
     # returns message about sucess
     sC_return = sub.saveClicked(db_platform, db_email, db_pw, db_lastTimeChange, db_addInfo)
@@ -40,7 +38,6 @@ def saveClicked():
     db_pw.clear()
     db_lastTimeChange.clear()
     db_addInfo.clear()
-    print("db-Containers cleared?:", db_email)
 
     # update after save has been clicked to refresh table 1
     # tabke one will always show the complete frame from loaded csv file
@@ -57,15 +54,16 @@ def exitClicked():
 
 # try to read in existing file
 # if file is not existant a new one will be created in safe_clicked()
-db_fileExists, error_code, error_message = sub.readFile()
+db_fileExists, error_code = sub.readFile()
 
 # load db into table_content the first time onl if file existant
 if table_1stUpdate == False:
     db_maxEntry = sub.maxEntry()
     if db_fileExists:
-        updateClicked()
-        if db_maxEntry > 1:
+        if db_maxEntry > 0:
             rd.dslc()
+    sub.readFile()
+    updateClicked()
     table_1stUpdate = True
 
 # GUI
@@ -105,8 +103,15 @@ def updateWindow():
             for i in range(table_maxEntry):                            # shows all rows of the table
                 with dpg.table_row():
                     for j in range(table_content.shape[1]):
-                        dpg.add_text(f"{table_content.iloc[i,j]}")     # Displays the value of each row/column combination
-
+                        if j == 5:
+                            if int(table_content.iloc[i,j]) > st.table_maxDiff:     # check if the date is in the allowed range
+                                dpg.add_text(f"{table_content.iloc[i,j]}", color=[255,0,0])     # Displays the value of each row/column combination
+                            elif int(table_content.iloc[i,j]) > st.table_intDiff and int(table_content.iloc[i,j]) < st.table_maxDiff:
+                                dpg.add_text(f"{table_content.iloc[i,j]}", color=[255,255,0])
+                            else:
+                                dpg.add_text(f"{table_content.iloc[i,j]}")
+                        else:
+                            dpg.add_text(f"{table_content.iloc[i,j]}", color=[0,255,100])
 dpg.create_viewport(title='Data Base Manipulation 2.0', width=st.ui_width + 10, height=st.ui_heigh, x_pos=1500, y_pos=0)
 dpg.setup_dearpygui()
 dpg.show_viewport()
@@ -118,14 +123,10 @@ while dpg.is_dearpygui_running():
         dpg.delete_item("content")
         updateWindow()
         table_updateClicked = False
-    
-    
 
     dpg.render_dearpygui_frame()
 
 dpg.destroy_context()
 
 # OPEN POINTS:
-#  -lastTimeChange int to date  db_dslc!!!!!
-#  -make a file status field
 #  -set a window with date difference

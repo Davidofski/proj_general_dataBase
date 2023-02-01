@@ -48,3 +48,9 @@ item13_ypos = item_ypos_offset * 2.3
 
 iField_width = 200
 iField_heigh = 10
+
+# colour setting for max day difference
+table_maxDiff = 180
+table_intDiff = 150
+
+# error codes
