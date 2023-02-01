@@ -19,7 +19,7 @@ def readFile():
         path = (r"C:\Users\david\OneDrive\Dokumenter\GitHub\DB_PW.csv")
 
         x = os.path.isfile(path)
-        db_fileExists = x
+        db_fileExists = True
 
         error_code = 1
         error_message = "File existing, but CAN'T be read"
@@ -69,6 +69,8 @@ def maxEntry():                 # checks the number of entries in the loaded dat
         table_maxEntry = len(db_loaded.axes[0])
     else:
         table_maxEntry = 0
+
+    print("[INFO]    table_maxEnrey: ", table_maxEntry)
     return table_maxEntry
 
 def saveClicked(db_platform, db_email, db_pw, db_lastTimeChange, db_addInfo):
@@ -82,10 +84,10 @@ def saveClicked(db_platform, db_email, db_pw, db_lastTimeChange, db_addInfo):
         db_dslc = []
         db_dslc.append(dslc)
         table_maxEntry = maxEntry()
-        db_id = table_maxEntry + 1
+        db_id = table_maxEntry
     else:
         db_id = []
-        db_id.append('0')
+        db_id.append(0)
         db_lastTimeChange_f = db_lastTimeChange
         db_dslc = []
         db_dslc.append('0')
@@ -99,7 +101,7 @@ def saveClicked(db_platform, db_email, db_pw, db_lastTimeChange, db_addInfo):
 
         f = {"platform" : db_platform, "email" : db_email, "password" : db_pw, "last time changed" : db_lastTimeChange_f, "additional information" : db_addInfo, "DSLC" : db_dslc} # , "days slc" : db_dslc
         print("[INFO]   dataframe:\n", f)
-        db_new = pd.DataFrame(f) # , index=db_id)
+        db_new = pd.DataFrame(f, index=[db_id])
 
         print('DEBUG: db_new has been created')
 
@@ -107,15 +109,15 @@ def saveClicked(db_platform, db_email, db_pw, db_lastTimeChange, db_addInfo):
 
         if db_fileExists:
             db = pd.concat([db_loaded, db_new])
-            print("DEBUG: database after concat: ")
+            print("DEBUG: database after concat with db_id: ", db_id)
             print(db)
             db = pd.DataFrame(db)
-            db.to_csv('%s' %db_fileName, sep=";", index=[db_id])
+            db.to_csv('%s' %db_fileName, sep=";", index=True)
             print("db: %s" %db)
 
             db_loaded = db
         else:
-            db_new.to_csv('%s' %db_fileName, sep=";", index=[db_id])
+            db_new.to_csv('%s' %db_fileName, sep=";", index=True)
             print("DEBUG: saving db_new")
             print(db_new)
             db = db_new

@@ -88,7 +88,7 @@ def dslc():
         dslc_date = db_loaded['last time changed']
         print("DEBUG    date since last change: ", dslc_date)
 
-        x = 1
+        x = 0
         dslc_after = {}
         for i in dslc_before:
             print("DEBUG    i: ", i)
@@ -103,9 +103,10 @@ def dslc():
 
             diff_days = calc_dslc(year, month, day)
 
-            db_loaded.loc[[x], ['DSLC']] = diff_days
-            print("DEBUG    dscl()  dslc_after:", db_loaded)
-            print("x= ", x)
+            if x > 0:
+                db_loaded.loc[[x], ['DSLC']] = diff_days
+                print("DEBUG    dscl()  dslc_after:", db_loaded)
+                print("x= ", x)
             x = x + 1
 
         print('db_loaded:\n', db_loaded)
@@ -122,7 +123,7 @@ def calc_dslc(past_year, past_month, past_day):
     today_year = int(today_0.strftime("%y"))
     today_month = int(today_0.strftime("%m"))
     today_day = int(today_0.strftime("%d"))
-    print("DEBUG    today_raw: ", today_year, today_month, today_day)
+    print("DEBUG    today_raw: [d,m,y] ", today_day, today_month, today_year)
 
     diff_year = today_year - past_year
     diff_month = today_month - past_month

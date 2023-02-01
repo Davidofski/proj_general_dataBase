@@ -129,5 +129,3 @@ dpg.destroy_context()
 #  -lastTimeChange int to date  db_dslc!!!!!
 #  -make a file status field
 #  -set a window with date difference
-#  -max entry does count from first line
-#  [BUG]: when creating first not default line db_id == 0 (should be 1)
