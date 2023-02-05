@@ -1,46 +1,84 @@
-import dearpygui.dearpygui as dpg
-import settings as st
-import main
+import pandas as pd
+from datetime import datetime
 
 db_fileName = "DB_PW.csv"
+errorLogName = "errorLog.csv"
+fileExists = False
+log_content = {}
 
 # messages
 em1 = "ERROR:[1]   File could not be found!"
 em2 = "ERROR:[2]   Could not safe dataframe to csv!"
 em3 = "ERROR:[3]   Path could not be found or has been changed!"
 em4 = "ERROR:[4]   Updating 'days since last change' in csv file not possible"
+em5 = "ERROR:[5]   Error-log could not be opened."
 
-def exitClicked():
-    dpg.stop_dearpygui()
+def alterlog():
+    # try to read in file
+    print("[FUNKTION]   erm.alterlog()")
+    global log_content, fileExists
+    fileExists = False
+    log_content = {}
+    try:
+        path = (r"C:\Users\david\OneDrive\Dokumenter\GitHub\proj_general_dataBase\errorLog.csv")
+        # path_exists = os.path.isfile(path)    # check if path and file existant
+        df = pd.read_csv(path, sep=";", index_col=[0])
+        log_content = df
+        fileExists = True
 
-def errorMessage():
-    main.handOverErrorCode(error_code, error_code_rd)
+    except:
+        print("[INFO]   csv file coldn't be read or found!")
+        fileExists = False
 
-    # error_code, error_code_rd = main.handOverErrorCode()
-        # GUI
-    dpg.create_context()
+    # add error messages to loaded dataframe for display in window error message
+    errorLog = []
 
-    with dpg.window(label="Failure in handling: '%s'" %db_fileName, width=st.uifm_width, height=st.uifm_heigh):
+    if fileExists:
+        for errorCode in log_content["error code"]:
+            if errorCode == 1:
+                errorLog.append(em1)
+            elif errorCode == 2:
+                errorLog.append(em2)
+            elif errorCode == 3:
+                errorLog.append(em3)
+            elif errorCode == 4:
+                errorLog.append(em4)
+            elif errorCode == 5:
+                errorLog.append(em5)
+            else:
+                errorLog.append("...")
 
-        if error_code == 1:
-            text1 = dpg.add_text(em2, color=[255,0,0])        
-        if error_code == 2:
-            text2 = dpg.add_text(em2, color=[255,0,0])
-        if error_code_rd == 3:
-            text3 = dpg.add_text(em3, color=[255,0,0])
-        if error_code_rd == 4:
-            text4 = dpg.add_text(em3, color=[255,0,0])
+        log_content["message"] = errorLog
 
-        button1 = dpg.add_button(label="OK", callback=exitClicked)
-            
-    dpg.create_viewport(title='ERROR MESSAGE', width=st.uifm_width + 10, height=st.uifm_heigh, x_pos=1000, y_pos=0)
-    dpg.setup_dearpygui()
-    dpg.show_viewport()
+    print("[Error LOG]:\n", log_content)
 
-    # below replaces, start_dearpygui()
-    while dpg.is_dearpygui_running():
-        # space for all running operations
+def saveErrorLog(errorCode):
+    print("[Function]   erm.saveErrorLog")
 
-        dpg.render_dearpygui_frame()
+    errorEntry = []
+    entryTimeStamp = []
+    errorEntry.append(errorCode)
+    entryTimeStamp.append(datetime.now().replace(microsecond=0))
 
-    dpg.destroy_context()
+    try:
+        path = (r"C:\Users\david\OneDrive\Dokumenter\GitHub\proj_general_dataBase\errorLog.csv")
+        em_loaded = pd.read_csv(path, sep=";", index_col=[0])
+        fileExists = True
+
+    except:
+        em_loaded = {}
+        fileExists = False
+
+    f = {"time stamp":entryTimeStamp, "error code":errorEntry}
+    em_new = pd.DataFrame(f)
+
+    if fileExists:
+        df = pd.concat([em_loaded, em_new])
+        df = pd.DataFrame(df)
+        df.to_csv("errorLog.csv", sep=";", index=True)
+
+    else:
+        df = pd.DataFrame(em_new)
+        df.to_csv("errorLog.csv", sep=";", index=True)
+
+    alterlog()

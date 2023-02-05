@@ -8,13 +8,13 @@ ui_heigh = 800
 uifm_width = 600
 uifm_heigh = 200
 
-# window 1 dimentions
+# window 1 [input] dimentions
 window1_heigh = 300
 window1_width = ui_width - 6
 window1_xpos = 0
 window1_ypos = 0
 
-# window 2 dimentions
+# window 2 [output] dimentions
 window2_heigh = 430
 window2_width = ui_width - 6
 window2_xpos = 0

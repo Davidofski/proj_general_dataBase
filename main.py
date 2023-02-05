@@ -1,8 +1,7 @@
 import dearpygui.dearpygui as dpg
 import sub
 import settings as st
-import rendering as rd
-import errormessage as erm
+import rendering as rd\
 
 # create emtply list container
 db_platform = []
@@ -16,11 +15,6 @@ table_updateClicked = False
 
 # filename used to create and read file into dataframe
 db_fileName = "DB_PW.csv"
-
-def handOverErrorCode():
-    error_code = sub.error_code
-    error_code_rd = rd.error_code
-    return error_code, error_code_rd
     
 def saveClicked():
     global db, db_fileName
@@ -56,14 +50,17 @@ def updateClicked():
 def exitClicked():
     dpg.stop_dearpygui()
 
+def okClicked():
+    dpg.delete_item("error message")
+
 # try to read in existing file
 # if file is not existant a new one will be created in safe_clicked()
-db_fileExists, error_code = sub.readFile()
+db_fileExists_atStartUp = sub.readFile()
 
 # load db into table_content the first time onl if file existant
 if table_1stUpdate == False:
     db_maxEntry = sub.maxEntry()
-    if db_fileExists:
+    if db_fileExists_atStartUp:
         if db_maxEntry > 0:
             rd.dslc()
     sub.readFile()
@@ -76,9 +73,9 @@ dpg.create_context()
 with dpg.window(label="'%s' MANIPULATION" %db_fileName, width=st.window1_width, height=st.window1_heigh, pos=(st.window1_xpos,st.window1_ypos)):
     dpg.add_text("In this UI you can read and manipulate the database: '%s'" %db_fileName, pos=(st.item1_xpos, st.item1_ypos))
     
-    if error_code == 0:
+    if db_fileExists_atStartUp:
         w1_text1 = dpg.add_text("Reading in of file was sucessfull!", pos=(st.item2_xpos, st.item2_ypos))
-    if error_code == 1:
+    else:
         w1_text3 = dpg.add_text("!!Error 1: File could NOT be found!\nNew file has been created.", color=[255,0,0], pos=(st.item3_xpos, st.item3_ypos))
 
     # Window 1 input fields
@@ -114,6 +111,7 @@ def updateWindow():
                                 dpg.add_text(f"{table_content.iloc[i,j]}")
                         else:
                             dpg.add_text(f"{table_content.iloc[i,j]}", color=[0,255,100])
+
 dpg.create_viewport(title='Data Base Manipulation 2.0', width=st.ui_width + 10, height=st.ui_heigh, x_pos=1500, y_pos=0)
 dpg.setup_dearpygui()
 dpg.show_viewport()
@@ -126,13 +124,10 @@ while dpg.is_dearpygui_running():
         updateWindow()
         table_updateClicked = False
 
-        if error_code > 0:
-            #os.startfile(r"C:\Users\david\OneDrive\Dokumenter\GitHub\proj_general_dataBase\errormessage.py")
-            # erm.errorMessage()
-
     dpg.render_dearpygui_frame()
 
 dpg.destroy_context()
 
 # OPEN POINTS:
 #  -set a window with date difference
+# [BUG]:    reding in file if not existant returns read file including first line!

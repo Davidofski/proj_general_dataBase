@@ -1,32 +1,27 @@
 import pandas as pd
 from datetime import datetime
-import os
+import errormessage as erm
 
 db_fileName = "DB_PW.csv"
-
-error_code = 0
+entryTimeStamp = []
+errorMessage = []
 
 # set taday_0 to today's raw date format
 today_0 = datetime.now()
 
 def readFile():
     print("[FUNCTION]   rd.readFile()")
-    global db_loaded, error_code
-    error_code = 0
+    global db_loaded
     try:
         path = (r"C:\Users\david\OneDrive\Dokumenter\GitHub\DB_PW.csv")
-        path_exists = os.path.isfile(path)    # check if path and file existant
-        
-        if path_exists:
-            db_loaded = pd.read_csv(path, sep=";", index_col=[0])
-            print("existing db: ")
-            print(db_loaded)
-        else:
-            error_code = 3
+        # path_exists = os.path.isfile(path)    # check if path and file existant
+        db_loaded = pd.read_csv(path, sep=";", index_col=[0])
 
     except:
         db_loaded = {}
-        error_code = 2
+        # Error 3
+        errorCode = 3
+        erm.saveErrorLog(errorCode)
 
     # return error_code, error_message
 def formating(db_lastTimeChange):
@@ -67,7 +62,7 @@ def dslc():
     print("[FUNCTION]   rd.dslc()")
     # !! need for condition that 1st line won't be altered
     readFile()
-    global db_loaded, error_code
+    global db_loaded
 
     try:
         dslc_date = db_loaded['last time changed']
@@ -88,7 +83,10 @@ def dslc():
         db_loaded.to_csv('%s' %db_fileName, sep=";")
 
     except:
-        error_code = 4
+        print("[EXPETION]   rd.dslc()")
+        # Error 4
+        errorCode = 4
+        erm.saveErrorLog(errorCode)
 
 def calc_dslc(past_year, past_month, past_day):
     print("[FUNCTION]   rd.calc_dslc")
@@ -105,3 +103,4 @@ def calc_dslc(past_year, past_month, past_day):
     diff_days = str(diff_year*365 + diff_month*30 + diff_day)
 
     return diff_days
+

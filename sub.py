@@ -2,9 +2,12 @@ import os
 import pandas as pd
 from datetime import datetime
 import rendering as rd
+import errormessage as erm
 
 db_fileName = "DB_PW.csv"
 db_entryTimeStamp = []
+db_fileExists_atStartUp = False
+error_code = 0
 
 today_0 = datetime.now()
 today_raw = str(today_0.replace(microsecond=0))
@@ -12,20 +15,20 @@ today = today_raw[:-9]
 
 def readFile():
     print("[FUNCTION]   sub.readFile()")
-    global db_loaded, db_fileExists, error_code
+    global db_loaded, db_fileExists
 
     try:
-        path = (r"C:\Users\david\OneDrive\Dokumenter\GitHub\DB_PW.csv")
+        path = (r"C:\Users\david\OneDrive\Dokumenter\GitHub\proj_general_dataBase\DB_PW.csv")
 
         db_fileExists = os.path.isfile(path)
+        db_fileExists_atStartUp = db_fileExists
         
         db_loaded = pd.read_csv(path, sep=";", index_col=[0])
-        print("Loaded dataframe:\n", db_loaded)
-
-        error_code = 0
+        print("[INFO]   Loaded dataframe:\n", db_loaded)
 
     except:
-        db_fileExists = False
+        print("[EXEPTION]   sub.readFile()")
+        db_fileExists_atStartUp = False
         db_platform = []
         db_email = []
         db_pw = []
@@ -37,13 +40,16 @@ def readFile():
         db_lastTimeChange.append('01-01-2000')
         db_addInfo.append('4321')
         saveClicked(db_platform, db_email, db_pw, db_lastTimeChange, db_addInfo)
-        error_code = 1
 
-    return db_fileExists, error_code
+        # Error 1
+        errorCode = 1
+        erm.saveErrorLog(errorCode)
+
+    return db_fileExists_atStartUp
 
 def updateClicked():
     print("[FUNCTION]   sub.updateClicked()")
-    global db_fileExists, db_loaded, error_code
+    global db_fileExists, db_loaded
     table_content = db_loaded
     return table_content
 
@@ -54,12 +60,11 @@ def maxEntry():                 # checks the number of entries in the loaded dat
         table_maxEntry = len(db_loaded.axes[0])
     else:
         table_maxEntry = 0
-
     return table_maxEntry
 
 def saveClicked(db_platform, db_email, db_pw, db_lastTimeChange, db_addInfo):
     print("[FUNCTION]   sub.saveClicked()")
-    global db_loaded, db_fileExists, error_code
+    global db_loaded, db_fileExists
 
     # only alter variables when database already existant
     # in not, first line shall not be alterd
@@ -89,6 +94,8 @@ def saveClicked(db_platform, db_email, db_pw, db_lastTimeChange, db_addInfo):
             db_new.to_csv('%s' %db_fileName, sep=";", index=True)
             db_loaded = db_new
             db_fileExists = True
-
     except:
-        error_code = 2
+        print("[EXEPTION]   sub.saveClicked()")
+        # Error 2
+        errorCode = 2
+        erm.saveErrorLog(errorCode)
