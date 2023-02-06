@@ -3,11 +3,15 @@ import pandas as pd
 from datetime import datetime
 import rendering as rd
 import errormessage as erm
+import sys
 
 db_fileName = "DB_PW.csv"
 db_entryTimeStamp = []
 db_fileExists_atStartUp = False
 error_code = 0
+db_cryptExists = False
+db_path = r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\DB_PW.csv"
+crypt_path = r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\DB_PW.crypt"
 
 today_0 = datetime.now()
 today_raw = str(today_0.replace(microsecond=0))
@@ -17,8 +21,16 @@ def readFile():
     print("[FUNCTION]   sub.readFile()")
     global db_loaded, db_fileExists
 
+    db_cryptExists = os.path.isfile(crypt_path)
+
+    if db_cryptExists:
+        print("[INFO]   database encrypted, program can't be started!")
+        errorCode = 6
+        erm.saveErrorLog(errorCode)
+        sys.exit()
+
     try:
-        path = (r"C:\Users\david\OneDrive\Dokumenter\GitHub\proj_general_dataBase\DB_PW.csv")
+        path = (db_path)
 
         db_fileExists = os.path.isfile(path)
         db_fileExists_atStartUp = db_fileExists
@@ -65,6 +77,8 @@ def maxEntry():                 # checks the number of entries in the loaded dat
 def saveClicked(db_platform, db_email, db_pw, db_lastTimeChange, db_addInfo):
     print("[FUNCTION]   sub.saveClicked()")
     global db_loaded, db_fileExists
+
+
 
     # only alter variables when database already existant
     # in not, first line shall not be alterd

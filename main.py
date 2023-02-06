@@ -1,7 +1,8 @@
 import dearpygui.dearpygui as dpg
 import sub
 import settings as st
-import rendering as rd\
+import rendering as rd
+import os
 
 # create emtply list container
 db_platform = []
@@ -50,6 +51,10 @@ def updateClicked():
 def exitClicked():
     dpg.stop_dearpygui()
 
+def exitAndEncryptClicked():
+    dpg.stop_dearpygui()
+    os.startfile(r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\de_encrytpion.py")
+
 def okClicked():
     dpg.delete_item("error message")
 
@@ -89,6 +94,7 @@ with dpg.window(label="'%s' MANIPULATION" %db_fileName, width=st.window1_width, 
     # #b_update = dpg.add_button(label="update output", callback=updateClicked)
     b_saveChanges = dpg.add_button(label="save changes to '%s'" %db_fileName, callback=saveClicked, pos=(st.item9_xpos, st.item9_ypos))
     b_exitClicked = dpg.add_button(label="EXIT", callback=exitClicked, pos=(st.item10_xpos, st.item10_ypos))
+    b_exitNencrypt = dpg.add_button(label="EXIT and goto Encrypter", callback=exitAndEncryptClicked, pos=(st.item16_xpos, st.item16_ypos))
 
     # Window 1 output fields
     oField_today = dpg.add_text("Today's date: %s" %sub.today, pos=(st.item11_xpos,st.item11_ypos))
@@ -130,4 +136,4 @@ dpg.destroy_context()
 
 # OPEN POINTS:
 #  -set a window with date difference
-# [BUG]:    reding in file if not existant returns read file including first line!
+# [BUG]:    reading in file if not existant returns read file including first line!

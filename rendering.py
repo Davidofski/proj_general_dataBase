@@ -92,6 +92,7 @@ def calc_dslc(past_year, past_month, past_day):
     print("[FUNCTION]   rd.calc_dslc")
     global today_0
 
+    # very simple approximation of days difference
     today_year = int(today_0.strftime("%y"))
     today_month = int(today_0.strftime("%m")) 
     today_day = int(today_0.strftime("%d"))

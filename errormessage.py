@@ -12,6 +12,8 @@ em2 = "ERROR:[2]   Could not safe dataframe to csv!"
 em3 = "ERROR:[3]   Path could not be found or has been changed!"
 em4 = "ERROR:[4]   Updating 'days since last change' in csv file not possible"
 em5 = "ERROR:[5]   Error-log could not be opened."
+em6 = "ERROR:[6]   File encrypted; main can not be started."
+em7 = "ERROR:[7]   Neither encrypted nor decrypted file found."
 
 def alterlog():
     # try to read in file
@@ -45,6 +47,10 @@ def alterlog():
                 errorLog.append(em4)
             elif errorCode == 5:
                 errorLog.append(em5)
+            elif errorCode == 6:
+                errorLog.append(em6)
+            elif errorCode == 7:
+                errorLog.append(em7)
             else:
                 errorLog.append("...")
 

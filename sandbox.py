@@ -1,5 +1,7 @@
-df = {"info1":340, "info2":500}
-var_bool = True
+string = 'something'
 
-x = type(var_bool)
-print(x)
+characters = ['a', 'b', 'c', 's']
+
+for i in characters:
+    x = string.find(i)
+    print(x)
