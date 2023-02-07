@@ -40,8 +40,11 @@ item9_ypos = item_ypos_offset * 4
 item10_xpos = item_xpos_offset + 700        # item 10 = button exit
 item10_ypos = item_ypos_offset * 5
 
-item16_xpos = item_xpos_offset + 700        # If file found path
+item16_xpos = item_xpos_offset + 700        # item 16 = exit and open encryption
 item16_ypos = item_ypos_offset * 6
+
+item22_xpos = item_xpos_offset + 700        # item 22 = exit and open show error log
+item22_ypos = item_ypos_offset * 7
 
 item11_xpos = item_xpos_offset              # item 11 = output today's date
 item11_ypos = item_ypos_offset * 8
@@ -76,3 +79,9 @@ item20_xpos = item_xpos_offset + 100   # item 20 = button decrypt file
 item20_ypos = item_ypos_offset * 6
 item21_xpos = item_xpos_offset         # item 21 = button exit clicked
 item21_ypos = item_ypos_offset * 7
+
+
+# error log window
+eL_width = 1200
+eL_height = 1000
+

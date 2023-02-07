@@ -18,7 +18,7 @@ em7 = "ERROR:[7]   Neither encrypted nor decrypted file found."
 def alterlog():
     # try to read in file
     print("[FUNKTION]   erm.alterlog()")
-    global log_content, fileExists
+    global fileExists
     fileExists = False
     log_content = {}
     try:
@@ -27,6 +27,7 @@ def alterlog():
         df = pd.read_csv(path, sep=";", index_col=[0])
         log_content = df
         fileExists = True
+        log_maxEntry = len(log_content.axes[0])
 
     except:
         print("[INFO]   csv file coldn't be read or found!")
@@ -55,8 +56,10 @@ def alterlog():
                 errorLog.append("...")
 
         log_content["message"] = errorLog
+        log_content = log_content.drop(columns=['error code'], axis=0)
 
     print("[Error LOG]:\n", log_content)
+    return log_content, log_maxEntry
 
 def saveErrorLog(errorCode):
     print("[Function]   erm.saveErrorLog")
@@ -86,5 +89,3 @@ def saveErrorLog(errorCode):
     else:
         df = pd.DataFrame(em_new)
         df.to_csv("errorLog.csv", sep=";", index=True)
-
-    alterlog()

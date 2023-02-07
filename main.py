@@ -55,6 +55,10 @@ def exitAndEncryptClicked():
     dpg.stop_dearpygui()
     os.startfile(r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\de_encrytpion.py")
 
+def exitAndGotoErorLog():
+    dpg.stop_dearpygui()
+    os.startfile(r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\showErrorLog.py")
+
 def okClicked():
     dpg.delete_item("error message")
 
@@ -95,6 +99,7 @@ with dpg.window(label="'%s' MANIPULATION" %db_fileName, width=st.window1_width, 
     b_saveChanges = dpg.add_button(label="save changes to '%s'" %db_fileName, callback=saveClicked, pos=(st.item9_xpos, st.item9_ypos))
     b_exitClicked = dpg.add_button(label="EXIT", callback=exitClicked, pos=(st.item10_xpos, st.item10_ypos))
     b_exitNencrypt = dpg.add_button(label="EXIT and goto Encrypter", callback=exitAndEncryptClicked, pos=(st.item16_xpos, st.item16_ypos))
+    b_exitToErrorLog = dpg.add_button(label="EXIT and goto error log", callback=exitAndGotoErorLog, pos=(st.item22_xpos, st.item22_ypos))
 
     # Window 1 output fields
     oField_today = dpg.add_text("Today's date: %s" %sub.today, pos=(st.item11_xpos,st.item11_ypos))
