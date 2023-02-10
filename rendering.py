@@ -13,9 +13,10 @@ def readFile():
     print("[FUNCTION]   rd.readFile()")
     global db_loaded
     try:
-        path = (r"C:\Users\david\OneDrive\Dokumenter\GitHub\DB_PW.csv")
+        path = (r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\DB_PW.csv")
         # path_exists = os.path.isfile(path)    # check if path and file existant
         db_loaded = pd.read_csv(path, sep=";", index_col=[0])
+        print("[INFO]   Reading of file was successful.")
 
     except:
         db_loaded = {}
@@ -65,21 +66,22 @@ def dslc():
     global db_loaded
 
     try:
+        print("[DEBUG]    Step 0")
         dslc_date = db_loaded['last time changed']
-
+        print("[DEBUG]    Step 1")
         x = 0
         for i in dslc_date:       
             date = str(dslc_date[x])
             year = int(date[8:10])
             month = int(date[3:5])
             day = int(date[:2])
-
+            print("[DEBUG]    Step 2")
             diff_days = calc_dslc(year, month, day)
-
+            print("[DEBUG]    Step 3")
             if x > 0:
                 db_loaded.loc[[x], ['DSLC']] = diff_days
             x = x + 1
-
+        print("[DEBUG]    Step 4")
         db_loaded.to_csv('%s' %db_fileName, sep=";")
 
     except:
@@ -105,3 +107,4 @@ def calc_dslc(past_year, past_month, past_day):
 
     return diff_days
 
+# print("[DEBUG]    Step 1")

@@ -8,6 +8,7 @@ import sys
 db_fileName = "DB_PW.csv"
 db_entryTimeStamp = []
 db_fileExists_atStartUp = False
+sortUnsort = False
 error_code = 0
 db_cryptExists = False
 db_path = r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\DB_PW.csv"
@@ -27,6 +28,7 @@ def readFile():
         print("[INFO]   database encrypted, program can't be started!")
         errorCode = 6
         erm.saveErrorLog(errorCode)
+        os.startfile(r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\showErrorLog.pyw")
         sys.exit()
 
     try:
@@ -59,11 +61,26 @@ def readFile():
 
     return db_fileExists_atStartUp
 
-def updateClicked():
+def updateClicked(sort):
     print("[FUNCTION]   sub.updateClicked()")
-    global db_fileExists, db_loaded
-    table_content = db_loaded
+    global db_loaded
+
+    if sort:
+        table_content = sortTable()
+        pass
+    else:
+        table_content = db_loaded
     return table_content
+
+def sortTable():
+    global db_loaded, sortUnsort
+    if sortUnsort:
+        sortedTable = db_loaded.sort_values(by=['DSLC'], ascending=False)
+        sortUnsort = False
+    else:
+        sortedTable = db_loaded.sort_index(inplace=False)
+        sortUnsort = True
+    return sortedTable
 
 def maxEntry():                 # checks the number of entries in the loaded dataframe //used in creating the table window 2
     print("[FUNCTION]   sub.maxEntry()")

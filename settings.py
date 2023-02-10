@@ -38,13 +38,15 @@ item8_ypos = item_ypos_offset * 7
 item9_xpos = item_xpos_offset + 700         # item 9 = button save
 item9_ypos = item_ypos_offset * 4
 item10_xpos = item_xpos_offset + 700        # item 10 = button exit
-item10_ypos = item_ypos_offset * 5
+item10_ypos = item_ypos_offset * 7
 
 item16_xpos = item_xpos_offset + 700        # item 16 = exit and open encryption
-item16_ypos = item_ypos_offset * 6
+item16_ypos = item_ypos_offset * 5
 
 item22_xpos = item_xpos_offset + 700        # item 22 = exit and open show error log
-item22_ypos = item_ypos_offset * 7
+item22_ypos = item_ypos_offset * 6
+item23_xpos = item_xpos_offset + 700        # item 23 = sort entrys in table after DSLC
+item23_ypos = item_ypos_offset * 8
 
 item11_xpos = item_xpos_offset              # item 11 = output today's date
 item11_ypos = item_ypos_offset * 8
@@ -82,6 +84,5 @@ item21_ypos = item_ypos_offset * 7
 
 
 # error log window
-eL_width = 1200
+eL_width = 680
 eL_height = 1000
-

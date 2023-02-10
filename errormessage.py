@@ -1,5 +1,6 @@
 import pandas as pd
 from datetime import datetime
+import os
 
 db_fileName = "DB_PW.csv"
 errorLogName = "errorLog.csv"
@@ -12,7 +13,7 @@ em2 = "ERROR:[2]   Could not safe dataframe to csv!"
 em3 = "ERROR:[3]   Path could not be found or has been changed!"
 em4 = "ERROR:[4]   Updating 'days since last change' in csv file not possible"
 em5 = "ERROR:[5]   Error-log could not be opened."
-em6 = "ERROR:[6]   File encrypted; main can not be started."
+em6 = "ERROR:[6]   File encrypted; main can not be started; decrypt file before!"
 em7 = "ERROR:[7]   Neither encrypted nor decrypted file found."
 
 def alterlog():
@@ -89,3 +90,6 @@ def saveErrorLog(errorCode):
     else:
         df = pd.DataFrame(em_new)
         df.to_csv("errorLog.csv", sep=";", index=True)
+
+    # open error log after saving a new entry
+    os.startfile(r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\showErrorLog.pyw")

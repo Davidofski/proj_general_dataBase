@@ -40,24 +40,34 @@ def saveClicked():
 
     # update after save has been clicked to refresh table 1
     # tabke one will always show the complete frame from loaded csv file
-    updateClicked()
+    updateClicked(False)
 
-def updateClicked():
+    # clear entry fields
+    dpg.set_value(iField_platform, "")
+    dpg.set_value(iField_email, "")
+    dpg.set_value(iField_pw, "")
+    dpg.set_value(iField_addInfo, "")
+
+def updateClicked(sortTable):
     global table_content, table_maxEntry, table_updateClicked
-    table_content = sub.updateClicked()
+    table_content = sub.updateClicked(sortTable)
     table_maxEntry = sub.maxEntry()
     table_updateClicked = True
+
+def sortClicked():
+    updateClicked(True)
+
 
 def exitClicked():
     dpg.stop_dearpygui()
 
 def exitAndEncryptClicked():
     dpg.stop_dearpygui()
-    os.startfile(r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\de_encrytpion.py")
+    os.startfile(r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\de_encrytpion.pyw")
 
-def exitAndGotoErorLog():
-    dpg.stop_dearpygui()
-    os.startfile(r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\showErrorLog.py")
+def openErorLog():
+    # dpg.stop_dearpygui()
+    os.startfile(r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\showErrorLog.pyw")
 
 def okClicked():
     dpg.delete_item("error message")
@@ -73,7 +83,7 @@ if table_1stUpdate == False:
         if db_maxEntry > 0:
             rd.dslc()
     sub.readFile()
-    updateClicked()
+    updateClicked(False)
     table_1stUpdate = True
 
 # GUI
@@ -96,10 +106,11 @@ with dpg.window(label="'%s' MANIPULATION" %db_fileName, width=st.window1_width, 
 
     # Window 1 buttons
     # #b_update = dpg.add_button(label="update output", callback=updateClicked)
-    b_saveChanges = dpg.add_button(label="save changes to '%s'" %db_fileName, callback=saveClicked, pos=(st.item9_xpos, st.item9_ypos))
+    b_saveChanges = dpg.add_button(label="SAVE changes to '%s'" %db_fileName, callback=saveClicked, pos=(st.item9_xpos, st.item9_ypos))
     b_exitClicked = dpg.add_button(label="EXIT", callback=exitClicked, pos=(st.item10_xpos, st.item10_ypos))
-    b_exitNencrypt = dpg.add_button(label="EXIT and goto Encrypter", callback=exitAndEncryptClicked, pos=(st.item16_xpos, st.item16_ypos))
-    b_exitToErrorLog = dpg.add_button(label="EXIT and goto error log", callback=exitAndGotoErorLog, pos=(st.item22_xpos, st.item22_ypos))
+    b_exitNencrypt = dpg.add_button(label="EXIT and goto encrypter", callback=exitAndEncryptClicked, pos=(st.item16_xpos, st.item16_ypos))
+    b_openErrorLog = dpg.add_button(label="OPEN error log", callback=openErorLog, pos=(st.item22_xpos, st.item22_ypos))
+    b_sortEntrys = dpg.add_button(label="Sort after DSLC", callback=sortClicked, pos=(st.item23_xpos, st.item23_ypos))
 
     # Window 1 output fields
     oField_today = dpg.add_text("Today's date: %s" %sub.today, pos=(st.item11_xpos,st.item11_ypos))
@@ -107,21 +118,22 @@ with dpg.window(label="'%s' MANIPULATION" %db_fileName, width=st.window1_width, 
 
 def updateWindow():
     with dpg.window(label="'%s' CONTENT" %db_fileName, width=st.window2_width, height=st.window2_heigh, pos=(st.window2_xpos,st.window2_ypos), tag="content"):
-        with dpg.table(label='DatasetTable', tag="table1"):
+        with dpg.table(label='DatasetTable', tag="table1", borders_innerV=True, resizable=True, policy=dpg.mvTable_SizingFixedFit, reorderable=True, sortable=True, row_background=True):
             for i in range(table_content.shape[1]):                    # Generates the correct amount of columns
                 dpg.add_table_column(label=table_content.columns[i])   # Adds the headers
-            for i in range(table_maxEntry):                            # shows all rows of the table
-                with dpg.table_row():
-                    for j in range(table_content.shape[1]):
-                        if j == 5:
-                            if int(table_content.iloc[i,j]) > st.table_maxDiff:     # check if the date is in the allowed range
-                                dpg.add_text(f"{table_content.iloc[i,j]}", color=[255,0,0])     # Displays the value of each row/column combination
-                            elif int(table_content.iloc[i,j]) > st.table_intDiff and int(table_content.iloc[i,j]) < st.table_maxDiff:
-                                dpg.add_text(f"{table_content.iloc[i,j]}", color=[255,255,0])
+            for i in range(table_maxEntry):
+                if i > 0:                            # shows all rows of the table except the first entry which is a dummy
+                    with dpg.table_row():
+                        for j in range(table_content.shape[1]):
+                            if j == 5:
+                                if int(table_content.iloc[i,j]) > st.table_maxDiff:     # check if the date is in the allowed range
+                                    dpg.add_text(f"{table_content.iloc[i,j]}", color=[255,0,0])     # Displays the value of each row/column combination
+                                elif int(table_content.iloc[i,j]) > st.table_intDiff and int(table_content.iloc[i,j]) < st.table_maxDiff:
+                                    dpg.add_text(f"{table_content.iloc[i,j]}", color=[255,255,0])
+                                else:
+                                    dpg.add_text(f"{table_content.iloc[i,j]}")
                             else:
-                                dpg.add_text(f"{table_content.iloc[i,j]}")
-                        else:
-                            dpg.add_text(f"{table_content.iloc[i,j]}", color=[0,255,100])
+                                dpg.add_text(f"{table_content.iloc[i,j]}", color=[200,155,200])
 
 dpg.create_viewport(title='Data Base Manipulation 2.0', width=st.ui_width + 10, height=st.ui_heigh, x_pos=1500, y_pos=0)
 dpg.setup_dearpygui()
@@ -141,4 +153,4 @@ dpg.destroy_context()
 
 # OPEN POINTS:
 #  -set a window with date difference
-# [BUG]:    reading in file if not existant returns read file including first line!
+# [ADD]:    Main window where you can choose which program to open.

@@ -8,7 +8,7 @@ import errormessage as erm
 db_fileName = "DB_PW.csv"
 db_path = r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\DB_PW.csv"
 crypt_path = r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\DB_PW.crypt"
-main_path = r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\main.py"
+main_path = r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\main.pyw"
 encrypted = False
 decrypted = False
 
