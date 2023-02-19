@@ -5,7 +5,7 @@ ui_width = 1000
 ui_heigh = 1000
 
 # window 1 [input] dimentions
-window1_heigh = 300
+window1_heigh = 350
 window1_width = ui_width - 6
 window1_xpos = 0
 window1_ypos = 0
@@ -14,7 +14,7 @@ window1_ypos = 0
 window2_heigh = 700
 window2_width = ui_width - 6
 window2_xpos = 0
-window2_ypos = 300
+window2_ypos = window1_heigh
 
 # item locations
 item_xpos_offset = 50
@@ -36,24 +36,24 @@ item7_ypos = item_ypos_offset * 4
 item8_xpos = item_xpos_offset               # item 8 = input additional information
 item8_ypos = item_ypos_offset * 7
 item9_xpos = item_xpos_offset + 700         # item 9 = button save
-item9_ypos = item_ypos_offset * 4
+item9_ypos = item_ypos_offset * 5
 item10_xpos = item_xpos_offset + 700        # item 10 = button exit
-item10_ypos = item_ypos_offset * 7
+item10_ypos = item_ypos_offset * 8
 
 item16_xpos = item_xpos_offset + 700        # item 16 = exit and open encryption
-item16_ypos = item_ypos_offset * 5
+item16_ypos = item_ypos_offset * 6
 
 item22_xpos = item_xpos_offset + 700        # item 22 = exit and open show error log
-item22_ypos = item_ypos_offset * 6
+item22_ypos = item_ypos_offset * 7
 item23_xpos = item_xpos_offset + 700        # item 23 = sort entrys in table after DSLC
-item23_ypos = item_ypos_offset * 8
+item23_ypos = item_ypos_offset * 4
 
 item11_xpos = item_xpos_offset              # item 11 = output today's date
 item11_ypos = item_ypos_offset * 8
-item12_xpos = item_xpos_offset              # item 12 = output date difference
-item12_ypos = item_ypos_offset
-item13_xpos = item_xpos_offset + 160        # item 13 = spare
-item13_ypos = item_ypos_offset * 2.3
+item12_xpos = item_xpos_offset + 200        # item 12 = output date difference
+item12_ypos = item_ypos_offset * 9
+item13_xpos = item_xpos_offset              # item 13 = fils status
+item13_ypos = item_ypos_offset * 9
 
 iField_width = 200
 iField_heigh = 10
@@ -63,13 +63,13 @@ table_maxDiff = 180
 table_intDiff = 150
 
 # de- and encryption
-enc_width = 500
-enc_heigh = 500
+enc_width = 640
+enc_heigh = 320
 
 item14_xpos = item_xpos_offset         # header
 item14_ypos = item_ypos_offset
-item15_xpos = item_xpos_offset         # File found [True, Flase]
-item15_ypos = item_ypos_offset * 2
+item15_xpos = item_xpos_offset         # File status [True, Flase]
+item15_ypos = item_ypos_offset * 3
 
 item17_xpos = item_xpos_offset         # item 17 = input path of file to encrypt
 item17_ypos = item_ypos_offset * 4
@@ -77,10 +77,13 @@ item18_xpos = item_xpos_offset         # item 18 = input password for encryption
 item18_ypos = item_ypos_offset * 5
 item19_xpos = item_xpos_offset         # item 19 = button encrypt file
 item19_ypos = item_ypos_offset * 6
-item20_xpos = item_xpos_offset + 100   # item 20 = button decrypt file
+item20_xpos = item_xpos_offset + 155   # item 20 = button decrypt file
 item20_ypos = item_ypos_offset * 6
 item21_xpos = item_xpos_offset         # item 21 = button exit clicked
-item21_ypos = item_ypos_offset * 7
+item21_ypos = item_ypos_offset * 7.5
+
+item24_xpos = item_xpos_offset + 200   # item 24 = button update
+item24_ypos = item_ypos_offset * 3
 
 
 # error log window

@@ -1,10 +1,14 @@
 import pandas as pd
 from datetime import datetime
 import errormessage as erm
+import os
 
 db_fileName = "DB_PW.csv"
 entryTimeStamp = []
 errorMessage = []
+currentDirectory = os.getcwd()
+print("[INFO]  current directory: ", currentDirectory)
+db_path = currentDirectory + r"\%s"%db_fileName
 
 # set taday_0 to today's raw date format
 today_0 = datetime.now()
@@ -13,7 +17,7 @@ def readFile():
     print("[FUNCTION]   rd.readFile()")
     global db_loaded
     try:
-        path = (r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\DB_PW.csv")
+        path = (db_path)
         # path_exists = os.path.isfile(path)    # check if path and file existant
         db_loaded = pd.read_csv(path, sep=";", index_col=[0])
         print("[INFO]   Reading of file was successful.")
@@ -66,26 +70,28 @@ def dslc():
     global db_loaded
 
     try:
-        print("[DEBUG]    Step 0")
+        # print("[DEBUG]    Step 0")
         dslc_date = db_loaded['last time changed']
-        print("[DEBUG]    Step 1")
+        # print("[DEBUG]  dslc_date:\n", dslc_date)
+        # print("[DEBUG]    Step 1")
         x = 0
-        for i in dslc_date:       
-            date = str(dslc_date[x])
+        for i in dslc_date:
+            # print('[DEBUG]  i: ', i)     
+            date = str(i)
             year = int(date[8:10])
             month = int(date[3:5])
             day = int(date[:2])
-            print("[DEBUG]    Step 2")
+            # print("[DEBUG]    Step 2")
             diff_days = calc_dslc(year, month, day)
-            print("[DEBUG]    Step 3")
-            if x > 0:
-                db_loaded.loc[[x], ['DSLC']] = diff_days
+            # print("[DEBUG]    Step 3")
+            db_loaded.loc[[x], ['DSLC']] = diff_days
             x = x + 1
-        print("[DEBUG]    Step 4")
-        db_loaded.to_csv('%s' %db_fileName, sep=";")
+        # print("[DEBUG]    Step 4")
+        db_loaded.to_csv(db_path, sep=";")
+        # print("[DEBUG]    Step 5")
 
     except:
-        print("[EXPETION]   rd.dslc()")
+        # print("[EXPETION]   rd.dslc()")
         # Error 4
         errorCode = 4
         erm.saveErrorLog(errorCode)

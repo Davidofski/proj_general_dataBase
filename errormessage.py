@@ -6,6 +6,12 @@ db_fileName = "DB_PW.csv"
 errorLogName = "errorLog.csv"
 fileExists = False
 log_content = {}
+currentDirectory = os.getcwd()
+print("[INFO]  current directory: ", currentDirectory)
+db_path = currentDirectory + r"\%s"%db_fileName
+module_encryption = currentDirectory + r"\de_encrytpion.pyw"
+module_errorLog = currentDirectory + r"\showErrorLog.pyw"
+rec_path = currentDirectory + r"\%s" %errorLogName
 
 # messages
 em1 = "ERROR:[1]   File could not be found!"
@@ -23,7 +29,7 @@ def alterlog():
     fileExists = False
     log_content = {}
     try:
-        path = (r"C:\Users\david\OneDrive\Dokumenter\GitHub\proj_general_dataBase\errorLog.csv")
+        path = (rec_path)
         # path_exists = os.path.isfile(path)    # check if path and file existant
         df = pd.read_csv(path, sep=";", index_col=[0])
         log_content = df
@@ -63,7 +69,7 @@ def alterlog():
     return log_content, log_maxEntry
 
 def saveErrorLog(errorCode):
-    print("[Function]   erm.saveErrorLog")
+    print("[Function]   erm.saveErrorLog with error code ", errorCode)
 
     errorEntry = []
     entryTimeStamp = []
@@ -71,7 +77,7 @@ def saveErrorLog(errorCode):
     entryTimeStamp.append(datetime.now().replace(microsecond=0))
 
     try:
-        path = (r"C:\Users\david\OneDrive\Dokumenter\GitHub\proj_general_dataBase\errorLog.csv")
+        path = (rec_path)
         em_loaded = pd.read_csv(path, sep=";", index_col=[0])
         fileExists = True
 
@@ -89,7 +95,4 @@ def saveErrorLog(errorCode):
 
     else:
         df = pd.DataFrame(em_new)
-        df.to_csv("errorLog.csv", sep=";", index=True)
-
-    # open error log after saving a new entry
-    os.startfile(r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\showErrorLog.pyw")
+        df.to_csv(rec_path, sep=";", index=True)
