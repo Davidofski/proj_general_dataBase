@@ -158,13 +158,16 @@ db_fileStat = checkFileStat()
 
 # load db into table_content the first time onl if file not encrypted
 if not db_fileStat[1]:
-    sub.readFile()
-    db_maxEntry, table_size = sub.maxEntry()
-    if db_fileStat[0]:
-        if db_maxEntry > 0:
-            rd.dslc()
+    """sub.readFile()
+    db_maxEntry, table_size = sub.maxEntry()"""
     updateClicked(False)
-else: os.startfile(module_encryption)
+    if db_fileStat[0]:
+        if table_maxEntry > 0:
+            rd.dslc()
+    # updateClicked(False)
+else:
+    os.startfile(module_encryption)
+    table_size = 0
 
 # GUI build up
 dpg.create_context()
@@ -301,5 +304,3 @@ dpg.destroy_context()
 # OPEN POINTS:
 # [ADD]:    Main window where you can choose which program to open. ??
 # [ToDo]:   rename programs to modules
-# [ToDo]:   make it possible to change values in DB by choosing a cell [change button in menue to activate change mode]
-# [ToDo]:   disable save new button when changes are active

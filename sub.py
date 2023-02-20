@@ -71,7 +71,7 @@ def updateClicked(sort):
 
     rd.dslc()
     readFile()
-    
+
     if sort:
         table_content = sortTable()
         pass
@@ -161,7 +161,7 @@ def saveClicked(db_platform, db_email, db_pw, db_lastTimeChange, db_addInfo):
         dslc = int(dslc)
         db_dslc = []
         db_dslc.append(dslc)
-        table_maxEntry = maxEntry()
+        table_maxEntry, table_size = maxEntry()
         db_id = table_maxEntry
     else:
         db_id = []
