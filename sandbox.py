@@ -1,38 +1,35 @@
 import dearpygui.dearpygui as dpg
+import pandas as pd
+import sub
 
 x = False
 y = False
 
-def toggleState():
-    global x,y
-    if x:
-        x = False
-        y = True
-    elif y:
-        y = False
-        x = True
-    else:
-        y = True
-    print('x:   ', x)
-    print('y:   ', y)
-    print('\n')
+ds = {'Age':[1, 2, 3, 4, 5, 6], 'Name':['Hubert', 'David', 'Susie', 'Hermann', 'Petra', 'Manuela'], 'add info':[2,2,2,2,2,2]}
 
-dpg.create_context()
+df = pd.DataFrame(ds)
 
-# window one with exit button
-with dpg.window(label='ui', width=300, height=300, pos=(0,0), tag='buttons'):
-    b_exit = dpg.add_button(label='Toggle State', callback=toggleState, tag='button', enabled=True)
+print(df)
+
+for i in df.items():
+    print(i)
+
+coloums = 3
+
+while False:
+
+    cell = int(input())
+    row = cell//coloums
+    y = cell/coloums
+    coloumn = int(round(coloums*(y-row), 0))
+    print('row:     ', row)
+    print('coloumn: ', coloumn)
+
+cell = '3_cell_11'
+newValue = '01-01-1000'
 
 
-dpg.create_viewport(title='Sandbox', width=300, height=300, x_pos=1000, y_pos=100)
-dpg.setup_dearpygui()
-dpg.show_viewport()
+sub.readFile()
+sub.changeItem(cell, newValue)
 
-# below replaces, start_dearpygui()
-while dpg.is_dearpygui_running():
-
-    if x:
-        dpg.configure_item(b_exit, enabled= False, show=False)
-
-    dpg.render_dearpygui_frame()
-dpg.destroy_context()
+newValue = 30 if cell == '3_cell_11' else 10

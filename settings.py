@@ -35,8 +35,8 @@ item7_xpos = item_xpos_offset + 480         # item 7 = input date picker
 item7_ypos = item_ypos_offset * 4
 item8_xpos = item_xpos_offset               # item 8 = input additional information
 item8_ypos = item_ypos_offset * 7
-item9_xpos = item_xpos_offset + 700         # item 9 = button save
-item9_ypos = item_ypos_offset * 5
+item9_xpos = item_xpos_offset + 0         # item 9 = button save new clicked
+item9_ypos = item_ypos_offset * 3
 item10_xpos = item_xpos_offset + 700        # item 10 = button exit
 item10_ypos = item_ypos_offset * 8
 
@@ -54,6 +54,9 @@ item12_xpos = item_xpos_offset + 200        # item 12 = output date difference
 item12_ypos = item_ypos_offset * 9
 item13_xpos = item_xpos_offset              # item 13 = fils status
 item13_ypos = item_ypos_offset * 9
+
+item25_xpos = item_xpos_offset + 700        # item 25 = save changes clicked
+item25_ypos = item_ypos_offset * 5
 
 iField_width = 200
 iField_heigh = 10
