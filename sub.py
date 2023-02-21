@@ -72,11 +72,9 @@ def updateClicked(sort):
     rd.dslc()
     readFile()
 
-    if sort:
-        table_content = sortTable()
-        pass
-    else:
-        table_content = db_loaded
+    print("[DEBUG]  sortTable: ", sort)
+    if sort: table_content = sortTable()
+    else: table_content = db_loaded
     return table_content
 
 def sortTable():

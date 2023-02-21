@@ -60,6 +60,7 @@ def encryptFile():
         encrypted = True
         decrypted = False
         stateChange = True
+        dpg.set_value(iF_pw, '')
     else:
         pass
 
@@ -73,6 +74,7 @@ def decryptFile():
         decrypted = True
         encrypted = False
         stateChange = True
+        dpg.set_value(iF_pw, '')
     
 def password():
     allowed = False
