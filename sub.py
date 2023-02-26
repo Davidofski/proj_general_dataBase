@@ -4,16 +4,17 @@ from datetime import datetime
 import rendering as rd
 import errormessage as erm
 
-db_fileName = "DB_PW.csv"
 db_entryTimeStamp = []
 db_fileExists_atStartUp = False
 sortUnsort = False
 error_code = 0
 db_cryptExists = False
 db_fileStat = [False, False]
-db_path = r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\DB_PW.csv"
-crypt_path = r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\DB_PW.crypt"
-modul_encryption = r"C:\Users\David\OneDrive\Dokumenter\GitHub\proj_general_dataBase\de_encrytpion.pyw"
+
+# get current location and merge with file name
+cD = os.getcwd()
+db_fileName = "DB_PW.csv"
+db_path = cD + r"\%s"%db_fileName
 
 today_0 = datetime.now()
 today_raw = str(today_0.replace(microsecond=0))
@@ -72,7 +73,6 @@ def updateClicked(sort):
     rd.dslc()
     readFile()
 
-    print("[DEBUG]  sortTable: ", sort)
     if sort: table_content = sortTable()
     else: table_content = db_loaded
     return table_content
@@ -80,9 +80,6 @@ def updateClicked(sort):
 def sortTable():
     global db_loaded, sortUnsort
     if sortUnsort:
-        '''sortedTable = db_loaded.sort_index(inplace=False)
-        sortUnsort = False
-        '''
         sortedTable = db_loaded.sort_values(by=['platform'], ascending=True)
         sortUnsort = False
     else:

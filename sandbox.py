@@ -1,35 +1,67 @@
-import dearpygui.dearpygui as dpg
-import pandas as pd
-import sub
+# learning new skills with CLASSES
 
-x = False
-y = False
+class Person:
 
-ds = {'Age':[1, 2, 3, 4, 5, 6], 'Name':['Hubert', 'David', 'Susie', 'Hermann', 'Petra', 'Manuela'], 'add info':[2,2,2,2,2,2]}
+    def __init__(self, name):
+        self.name = name
 
-df = pd.DataFrame(ds)
+    def setAge(self, age):
+        age = int(age)
+        if age < 0 or age > 100:
+            age = 0
+        self.age = age
 
-print(df)
+    def __str__(self):
+        return self.name
+    
+    def getProp(self):
+        return f"{self.name}, {self.age}"
+    
+    def __gt__(self, other):
+        return self.age > other.age
+    
+    def __eq__(self, other):
+        return self.age == other.age
+    
+    def __sub__(self, other):
+        return self.age - other.age
 
-for i in df.items():
-    print(i)
+# define name and age of person 1
+print()
+name = input("Person 1, please enter your name: ")
+p1 = Person(name)
 
-coloums = 3
+age = input(f"{p1} please enter your age: ")
+p1.setAge(age)
 
-while False:
+print("Person 1: ", p1.getProp())
+print()
 
-    cell = int(input())
-    row = cell//coloums
-    y = cell/coloums
-    coloumn = int(round(coloums*(y-row), 0))
-    print('row:     ', row)
-    print('coloumn: ', coloumn)
+# define name and age of person 2
+name = input("Person 2, please enter your name: ")
+p2 = Person(name)
 
-cell = '3_cell_11'
-newValue = '01-01-1000'
+age = input(f"{p2} please enter your age: ")
+p2.setAge(age)
 
+print("Person 2: ", p2.getProp())
+print()
 
-sub.readFile()
-sub.changeItem(cell, newValue)
+if p1 > p2:
+    print(f"{p1} is older than {p2}")
+    print(f"{p1} is {p1-p2} years older.\n")
+    print(f"Why are you so old {p1}??")
+elif p1 == p2:
+    print(f"{p1} and {p2} are of same age.")
+else:
+    print(f"{p2} is older than {p1}")
+    print(f"{p2} is {p2-p1} years older.\n")
+    print(f"Why are you so old {p2}??")
 
-newValue = 30 if cell == '3_cell_11' else 10
+class task:
+    def __init__(self):
+        pass
+
+print("""----------
+    END
+----------""")

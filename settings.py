@@ -67,7 +67,7 @@ table_intDiff = 150
 
 # de- and encryption
 enc_width = 640
-enc_heigh = 320
+enc_heigh = 350
 
 item14_xpos = item_xpos_offset         # header
 item14_ypos = item_ypos_offset
@@ -79,14 +79,19 @@ item17_ypos = item_ypos_offset * 4
 item18_xpos = item_xpos_offset         # item 18 = input password for encryption
 item18_ypos = item_ypos_offset * 5
 item19_xpos = item_xpos_offset         # item 19 = button encrypt file
-item19_ypos = item_ypos_offset * 6
+item19_ypos = item_ypos_offset * 7
 item20_xpos = item_xpos_offset + 155   # item 20 = button decrypt file
-item20_ypos = item_ypos_offset * 6
+item20_ypos = item_ypos_offset * 7
 item21_xpos = item_xpos_offset         # item 21 = button exit clicked
-item21_ypos = item_ypos_offset * 7.5
+item21_ypos = item_ypos_offset * 8.5
 
-item24_xpos = item_xpos_offset + 200   # item 24 = button update
+item24_xpos = item_xpos_offset + 180   # item 24 = button update
 item24_ypos = item_ypos_offset * 3
+
+item26_xpos = item_xpos_offset         # item 26 = input confirm password
+item26_ypos = item_ypos_offset * 6
+item27_xpos = item_xpos_offset + 300   # item 27 = message pw not possible or incorrect
+item27_ypos = item_ypos_offset * 3
 
 
 # error log window

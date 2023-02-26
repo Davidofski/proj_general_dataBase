@@ -1,9 +1,7 @@
 import dearpygui.dearpygui as dpg
-import sub
 import settings as st
 import rendering as rd
-import os
-import time
+import time, os, sub
 
 # create emtply list container
 db_platform = []
@@ -11,9 +9,8 @@ db_email = []
 db_pw = []
 db_lastTimeChange = []
 db_addInfo = []
-db_fileStat = [False, False]    # [0]: file exists at start-up; [1]: file encrypted
+db_fileStat = [False, False]    # [0]: file exists at start-up (True, Flase); [1]: file encrypted(True, Flase)
 dslc = []
-db = {}
 table_1stUpdate = False
 table_updateClicked = False
 timerStarted0 = False
@@ -21,16 +18,17 @@ timerStarted1 = False
 startTime0 = 0
 startTime1 = 0
 edditedCells = []
+
 # filename used to create and read file into dataframe
 db_fileName = "DB_PW.csv"
-currentDirectory = os.getcwd()
-print("[INFO]  current directory: ", currentDirectory)
-db_path = currentDirectory + r"\%s"%db_fileName
-module_encryption = currentDirectory + r"\de_encrytpion.pyw"
-module_errorLog = currentDirectory + r"\showErrorLog.pyw"
-    
+cD = os.getcwd()
+print("[INFO]  current directory: ", cD)
+module_encryption = cD + r"\de_encrytpion.pyw"
+module_errorLog = cD + r"\showErrorLog.pyw"
+
+# saves new entry to database 
 def saveClicked():
-    global db, db_fileName
+    global db_fileName, table_updateClicked
 
     # append new list item into container | in this proj always only one item per container
     # container will be cleared after use
@@ -51,15 +49,17 @@ def saveClicked():
     db_addInfo.clear()
 
     # update after save has been clicked to refresh table 1
-    # tabke one will always show the complete frame from loaded csv file
-    updateClicked(False)
+    # table one will always show the complete data frame from loaded csv file
+    # updateClicked(False)
+    table_updateClicked = True
 
-    # clear entry fields
+    # clear entry fields after saving, so they are free for the nex one
     dpg.set_value(iField_platform, "")
     dpg.set_value(iField_email, "")
     dpg.set_value(iField_pw, "")
     dpg.set_value(iField_addInfo, "")
 
+# saves changes made in the table to database; new entry is disbled
 def saveChangesClicked():
     global edditedCells, table_updateClicked
     savingMessage = False
@@ -71,20 +71,22 @@ def saveChangesClicked():
     dpg.configure_item(b_saveNew, show=True, enabled=True)
     table_updateClicked = True
 
+    # displays wether saving was successfull or not
     if not savingMessage:
         dpg.set_value(w1_text1, 'Saving changes was successfull.')
     else:
         dpg.set_value(w1_text1, 'Error at saving changes.\nAt least one cell did not match format')
 
+# update table, so changes are visible
 def updateClicked(sortTable):
     global table_content, table_maxEntry, table_updateClicked, table_size
     table_content = sub.updateClicked(sortTable)
     table_maxEntry, table_size = sub.maxEntry()
-    table_updateClicked = True
+    # table_updateClicked = True
+    updateWindow()
 
 def sortClicked():
     updateClicked(True)
-
 
 def exitClicked():
     dpg.stop_dearpygui()
@@ -94,30 +96,24 @@ def exitAndEncryptClicked():
     os.startfile(module_encryption)
 
 def openErorLog():
-    # dpg.stop_dearpygui()
     os.startfile(module_errorLog)
 
-def okClicked():
-    dpg.delete_item("error message")
-
+""""
+Makes the cells editable.
+Clicked cell will be replaced by input text field.
+Eddited cells will be stored in a var: edditedCells, to remember later which ones to save to database.
+"""
 def cellEdit(sender, appData):
-
     global currentCell, edditedCells
 
-    print('[DEBUG]  appData:', appData)
-    print('[DEBUG]  sender: ', sender)
     currentCell = appData[1]
     currentContent = dpg.get_value(appData[1])
     parent = dpg.get_item_parent(currentCell)
-    print('[DEBUG]  currentContent: ', currentContent)
-    print('[DEBUG]  parent: ', parent)
 
     # iterate cells in current row and save the position
     cell_position = None
     cell_before = None
     for child in dpg.get_item_children(parent)[1]:
-
-        print('[DEBUG]  child in parent: ', child)
 
         # if we saved a cell position, we can save the next one for the before-parameter
         if cell_position:
@@ -140,10 +136,7 @@ def cellEdit(sender, appData):
         dpg.add_input_text(tag=currentCell, parent=parent)
 
     dpg.set_value(currentCell, currentContent)
-
     edditedCells.append(currentCell)
-    print("[BUILD]  edditedCells: ", edditedCells)
-
     dpg.configure_item(b_saveNew, show=False, enabled=False)
 
 # try to read in existing file
@@ -156,12 +149,11 @@ def checkFileStat():
 # failure in maxEntrys would occur otherwise
 db_fileStat = checkFileStat()
 
-# load db into table_content the first time onl if file not encrypted
+# load db into table_content the first time only if file not encrypted
 if not db_fileStat[1]:
-    """sub.readFile()
-    db_maxEntry, table_size = sub.maxEntry()"""
-    updateClicked(False)
+    table_updateClicked = True
     if db_fileStat[0]:
+        table_maxEntry, table_size = sub.maxEntry()
         if table_maxEntry > 0:
             rd.dslc()
     # updateClicked(False)
@@ -176,6 +168,7 @@ dpg.set_global_font_scale(1)
 with dpg.window(label="'%s' MANIPULATION" %db_fileName, width=st.window1_width, height=st.window1_heigh, pos=(st.window1_xpos,st.window1_ypos)):
     dpg.add_text("In this UI you can read and manipulate the database: '%s'" %db_fileName, pos=(st.item1_xpos, st.item1_ypos))
     
+    # Window 1 file status field
     if db_fileStat[0] and not db_fileStat[1]:
         w1_text1 = dpg.add_text("Reading in of file was sucessfull!", pos=(st.item2_xpos, st.item2_ypos))
     else:
@@ -204,15 +197,15 @@ with dpg.window(label="'%s' MANIPULATION" %db_fileName, width=st.window1_width, 
 
 
 def cellHandler(i, j):
-    """
-    'j'= coloumn and 'i'=row in cell tag swapped, because it makes the location determination easier in sub.changeItem()
-    """
+    # 'j'= coloumn and 'i'=row in cell tag swapped, because it makes the location determination easier in sub.changeItem()
+
     with dpg.item_handler_registry(tag=f"cell_handler_{i}{j}"):
         dpg.add_item_clicked_handler(callback=cellEdit)
     dpg.bind_item_handler_registry(f"{j}_cell_{i}", f"cell_handler_{i}{j}")
 
 def itemCleaner():
     # deletes all items and cell handlers from table 1
+    # else conflict with creating new items
     global table_content
 
     for i in range(table_content.shape[0]):
@@ -270,27 +263,26 @@ while dpg.is_dearpygui_running():
     # space for all running operations
 
     # display the choosen difference in days since the last time changed
+    # will be updated evrey second; else it would run every cycle
     if time.time() - startTime1 > 1:
         db_lastTimeChange.append(dpg.get_value(iField_lastTimeChange))
         db_lastTimeChange_f, diff_days = rd.formating(db_lastTimeChange)
         dpg.set_value(oField_dateDifference, 'Not changed since: %s days' %diff_days)
         db_lastTimeChange.clear()
         startTime1 = time.time()
-
     if db_fileStat[1] and not timerStarted0:
         timerStarted0 = True
         startTime0 = time.time()
-
     if db_fileStat[1] and timerStarted0 and time.time() - startTime0 > 5:
         db_fileStat = sub.checkFileStatus()
         if not db_fileStat[1]:
-            updateClicked(False)
+            # updateClicked(False)
             table_updateClicked = True
-            not timerStarted0
+            timerStarted0 = False
             dpg.set_value(w1_text1, 'File encrypted.')
-
         else: startTime0 = time.time()
 
+    # updating table after: loading DB, changing anything or adding line
     if table_updateClicked:
         updateClicked(False)
         updateWindow()
@@ -302,5 +294,4 @@ while dpg.is_dearpygui_running():
 dpg.destroy_context()
 
 # OPEN POINTS:
-# [ADD]:    Main window where you can choose which program to open. ??
 # [ToDo]:   rename programs to modules

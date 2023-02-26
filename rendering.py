@@ -112,5 +112,3 @@ def calc_dslc(past_year, past_month, past_day):
     diff_days = str(diff_year*365 + diff_month*30 + diff_day)
 
     return diff_days
-
-# print("[DEBUG]    Step 1")

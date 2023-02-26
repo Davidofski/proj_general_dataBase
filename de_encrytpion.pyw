@@ -24,6 +24,7 @@ def exitClicked():
 def updateClicked():
     currentDirectory = os.getcwd()
     dpg.set_value(t_path, 'Path: %s' %currentDirectory)
+    dpg.set_value(t_message, '')
     readFile()
 
 def readFile():
@@ -50,37 +51,62 @@ def saveFile(db_decrypted):
     db_toSave = pd.DataFrame(db_decrypted)
     db_toSave.to_csv('%s' %db_fileName, sep=';')
 
+def errorMessage(message):
+    print(f'[INFO]  errorMessage with {message} as message.')
+
+    if message == 'youShallNotPass':
+        dpg.set_value(t_message, 'Password does not fit requirements!')
+
+    if message == 'negative':
+        dpg.set_value(t_message, 'DE- or En-cryption failed!')
+
 def encryptFile():
     global decrypted, encrypted, stateChange
 
     if decrypted:
-        db_loaded = readFile()
-        pw = password()
-        crp.to_encrypted(db_loaded, password=pw, path=db_path, salt=dongel)
-        encrypted = True
-        decrypted = False
-        stateChange = True
-        dpg.set_value(iF_pw, '')
-    else:
-        pass
+        try:
+            db_loaded = readFile()
+            print('[DEBUG]  file read')
+            pw = password()
+            print(f'[DEBUG]  pw handled and returned {pw}')
+            if pw != 'youShallNotPass':
+                crp.to_encrypted(db_loaded, password=pw, path=db_path, salt=dongel)
+                encrypted = True
+                decrypted = False
+                stateChange = True
+                dpg.set_value(iF_pw, '')
+                dpg.set_value(iF_cpw, '')
+                dpg.set_value(t_message, '')
+            else:
+                errorMessage('youShallNotPass')
+        except: errorMessage('negative')
 
 def decryptFile():
     global encrypted, decrypted, stateChange
 
     if encrypted:
-        pw = password()
-        db_decrypted = crp.read_encrypted(path=db_path, password=pw, salt=dongel)
-        saveFile(db_decrypted)
-        decrypted = True
-        encrypted = False
-        stateChange = True
-        dpg.set_value(iF_pw, '')
+        try:
+            pw = password()
+            if pw != 'youShallNotPass':
+                db_decrypted = crp.read_encrypted(path=db_path, password=pw, salt=dongel)
+                saveFile(db_decrypted)
+                decrypted = True
+                encrypted = False
+                stateChange = True
+                dpg.set_value(iF_pw, '')
+                dpg.set_value(iF_cpw, '')
+                dpg.set_value(t_message, '')
+            else:
+                errorMessage('youShallNotPass')
+        except: errorMessage('negative')
+    
     
 def password():
     allowed = False
     number = ['1','2','3','4','5','6','7','8','9','0']
     character = ['!','-','_']
     pw = str(dpg.get_value(iF_pw))
+    cpw = str(dpg.get_value(iF_cpw))
 
     if len(pw) > 8:
         allowed = True
@@ -93,10 +119,10 @@ def password():
                 if x > -1:
                     allowed = True
 
-    if allowed == True:
+    if allowed == True and pw == cpw:
         return pw
     else:
-        exit()
+        return 'youShallNotPass'
 
 readFile()
 
@@ -105,8 +131,10 @@ with dpg.window(label="De- and Encrypting %s" %db_fileName, width=st.enc_width, 
     dpg.add_text("Progam to de- and encrypt database.\nAttention!! Dongle of this program used, file can't be encrypted without!", pos=(st.item14_xpos, st.item14_ypos))
     t_fileStatus = dpg.add_text("No file found", pos=(st.item15_xpos, st.item15_ypos), tag='fileStatus')
     t_path = dpg.add_text("Path: %s" %currentDirectory, pos=(st.item17_xpos, st.item17_ypos))
+    t_message = dpg.add_text("", pos=(st.item27_xpos, st.item27_ypos), color=(255,0,0))
     
     iF_pw = dpg.add_input_text(label='password', hint='some password; [no spaces allowed]', no_spaces=True, pos=(st.item18_xpos, st.item18_ypos), height=st.iField_heigh, width=st.iField_width + 140)
+    iF_cpw = dpg.add_input_text(label='confirm password', hint='same as above', no_spaces=True, pos=(st.item26_xpos, st.item26_ypos), height=st.iField_heigh, width=st.iField_width + 140)
     
     b_encrypt = dpg.add_button(label='Encrypt', callback=encryptFile, pos=(st.item19_xpos, st.item19_ypos))
     b_decrypt = dpg.add_button(label='Decrypt', callback=decryptFile, pos=(st.item20_xpos, st.item20_ypos))
@@ -134,7 +162,10 @@ while dpg.is_dearpygui_running():
         dpg.configure_item(b_encrypt, show=True, enabled=True)
         stateChange = False
 
+    if stateChange:
+        print(f'[DEBUG] decrypted: {decrypted}')
+        print(f'[DEBUG] encrypted: {encrypted}')
+        print(f'[DEBUG] stateChange: {stateChange}')
+
     dpg.render_dearpygui_frame()
 dpg.destroy_context()
-
-# [ADD]     when update clicked, the path shall be updated as well
