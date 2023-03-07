@@ -21,7 +21,8 @@ em4 = "ERROR:[4]   Updating 'days since last change' in csv file not possible"
 em5 = "ERROR:[5]   Error-log could not be opened."
 em6 = "ERROR:[6]   File encrypted; main can not be started; decrypt file before!"
 em7 = "ERROR:[7]   Neither encrypted nor decrypted file found."
-em8 = "ERROR:[8]   Variable could not be changed\n either not changeable or format incorrect"
+em8 = """ERROR:[8]   Variable could not be changed
+            It is either not changeable or format incorrect"""
 
 def alterlog():
     # try to read in file

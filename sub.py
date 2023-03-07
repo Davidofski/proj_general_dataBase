@@ -20,6 +20,11 @@ today_0 = datetime.now()
 today_raw = str(today_0.replace(microsecond=0))
 today = today_raw[:-9]
 
+# date for main date picker
+today_year = datetime.now().year
+today_month = datetime.now().month
+today_day = datetime.now().day
+
 def readFile():
     print("[FUNCTION]   sub.readFile()")
     global db_loaded, db_fileExists
@@ -44,7 +49,11 @@ def readFile():
         db_pw.append('xxx')
         db_lastTimeChange.append('01-01-2000')
         db_addInfo.append('4321')
-        saveClicked(db_platform, db_email, db_pw, db_lastTimeChange, db_addInfo)
+        saveClicked(db_platform,
+                    db_email,
+                    db_pw,
+                    db_lastTimeChange,
+                    db_addInfo)
 
         # Error 1
         errorCode = 1
@@ -80,14 +89,17 @@ def updateClicked(sort):
 def sortTable():
     global db_loaded, sortUnsort
     if sortUnsort:
-        sortedTable = db_loaded.sort_values(by=['platform'], ascending=True)
+        sortedTable = db_loaded.sort_values(by=['platform'],
+                                            ascending=True)
         sortUnsort = False
     else:
-        sortedTable = db_loaded.sort_values(by=['DSLC'], ascending=False)
+        sortedTable = db_loaded.sort_values(by=['DSLC'],
+                                            ascending=False)
         sortUnsort = True
     return sortedTable
 
-def maxEntry():                 # checks the number of entries in the loaded dataframe //used in creating the table window 2
+def maxEntry():
+    # checks the number of entries in the loaded dataframe
     print("[FUNCTION]   sub.maxEntry()")
     global db_loaded, db_fileExists
     if db_fileExists:
@@ -107,7 +119,8 @@ def changeItem(cell, newValue, save):
     print('[INFO]       newValue', newValue)
 
     if not save:
-        # Method to determine the row and the coloumn of the cell position to change the corresponding item in the dataframe.
+        # Method to determine the row and the coloumn of the cell
+        # position to change the corresponding item in the dataframe.
         coloumn = int(cell[:1])
         try:
             row = int(cell[-2:])
@@ -117,17 +130,18 @@ def changeItem(cell, newValue, save):
         print('[BUILD]  coloumn: ', coloumn)
         print('[BUILD]  row: ', row)
 
-        """
-        Testing procedure to determine wether the changes are allowed or not
-        """
-        # check date since last time changed
+        # Testing procedure to determine wether the changes are allowed
+        # or not
+        # Check date since last time changed
         if coloumn == 3:
             try:
                 int(newValue[:2])
                 int(newValue[3:5]),
                 int(newValue[6:10])
                 dashCount = str(newValue).find('-')
-                if dashCount > 1 and dashCount < 3 and len(newValue) == 10: accepted = True
+                if (dashCount > 1
+                    and dashCount < 3
+                    and len(newValue)== 10): accepted = True
             except: accepted = False
         else: accepted = True
 
@@ -145,7 +159,8 @@ def changeItem(cell, newValue, save):
 
     
 
-def saveClicked(db_platform, db_email, db_pw, db_lastTimeChange, db_addInfo):
+def saveClicked(db_platform, db_email, db_pw, db_lastTimeChange,
+                db_addInfo):
     print("[FUNCTION]   sub.saveClicked()")
     global db_loaded, db_fileExists
 
@@ -166,7 +181,11 @@ def saveClicked(db_platform, db_email, db_pw, db_lastTimeChange, db_addInfo):
         db_dslc.append('0')
 
     try:
-        f = {"platform" : db_platform, "email" : db_email, "password" : db_pw, "last time changed" : db_lastTimeChange_f, "additional information" : db_addInfo, "DSLC" : db_dslc}
+        f = {"platform" : db_platform, "email" : db_email,
+             "password" : db_pw,
+             "last time changed" : db_lastTimeChange_f,
+             "additional information" : db_addInfo,
+             "DSLC" : db_dslc}
         db_new = pd.DataFrame(f, index=[db_id])
 
         if db_fileExists:

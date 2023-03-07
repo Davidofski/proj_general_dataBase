@@ -25,7 +25,7 @@ class Person:
     
     def __sub__(self, other):
         return self.age - other.age
-
+"""
 # define name and age of person 1
 print()
 name = input("Person 1, please enter your name: ")
@@ -61,7 +61,19 @@ else:
 class task:
     def __init__(self):
         pass
+"""
 
-print("""----------
-    END
-----------""")
+import datetime
+
+past = datetime.date(2022,12,10)
+today = datetime.date.today()
+delta = today - past
+diff = delta.days
+print("Diff days: ", diff)
+
+
+import sandbox2 as sb2
+
+db = sb2.readFile()
+
+print("DB loaded via other program:\n", db)

@@ -21,7 +21,7 @@ item_xpos_offset = 50
 item_ypos_offset = 30
 item1_xpos = item_xpos_offset + 250         # item 1 = header
 item1_ypos = item_ypos_offset * 1
-item2_xpos = item_xpos_offset + 250         # item 2 = file read status successfull
+item2_xpos = item_xpos_offset + 260         # item 2 = file read status successfull
 item2_ypos = item_ypos_offset * 1.8
 item3_xpos = item_xpos_offset + 250         # item 3 = error message
 item3_ypos = item_ypos_offset * 1.8
@@ -40,6 +40,13 @@ item9_ypos = item_ypos_offset * 3
 item10_xpos = item_xpos_offset + 700        # item 10 = button exit
 item10_ypos = item_ypos_offset * 8
 
+item11_xpos = item_xpos_offset              # item 11 = output today's date
+item11_ypos = item_ypos_offset * 8
+item12_xpos = item_xpos_offset + 200        # item 12 = output date difference
+item12_ypos = item_ypos_offset * 9
+item13_xpos = item_xpos_offset              # item 13 = fils status
+item13_ypos = item_ypos_offset * 9
+
 item16_xpos = item_xpos_offset + 700        # item 16 = exit and open encryption
 item16_ypos = item_ypos_offset * 6
 
@@ -47,13 +54,6 @@ item22_xpos = item_xpos_offset + 700        # item 22 = exit and open show error
 item22_ypos = item_ypos_offset * 7
 item23_xpos = item_xpos_offset + 700        # item 23 = sort entrys in table after DSLC
 item23_ypos = item_ypos_offset * 4
-
-item11_xpos = item_xpos_offset              # item 11 = output today's date
-item11_ypos = item_ypos_offset * 8
-item12_xpos = item_xpos_offset + 200        # item 12 = output date difference
-item12_ypos = item_ypos_offset * 9
-item13_xpos = item_xpos_offset              # item 13 = fils status
-item13_ypos = item_ypos_offset * 9
 
 item25_xpos = item_xpos_offset + 700        # item 25 = save changes clicked
 item25_ypos = item_ypos_offset * 5
