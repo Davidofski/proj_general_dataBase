@@ -3,9 +3,9 @@ import pandas as pd
 from datetime import datetime
 import rendering as rd
 import errormessage as erm
+import filehandling as fh
 
 db_entryTimeStamp = []
-db_fileExists_atStartUp = False
 sortUnsort = False
 error_code = 0
 db_cryptExists = False
@@ -25,53 +25,15 @@ today_year = datetime.now().year
 today_month = datetime.now().month
 today_day = datetime.now().day
 
-def readFile():
-    print("[FUNCTION]   sub.readFile()")
-    global db_loaded, db_fileExists
-
-    try:
-        db_fileExists = os.path.isfile(db_path)
-        db_fileExists_atStartUp = db_fileExists
-        
-        db_loaded = pd.read_csv(db_path, sep=";", index_col=[0])
-        print("[INFO]   Loaded dataframe:\n", db_loaded)
-
-    except:
-        print("[EXEPTION]   sub.readFile()")
-        db_fileExists_atStartUp = False
-        db_platform = []
-        db_email = []
-        db_pw = []
-        db_lastTimeChange = []
-        db_addInfo = []
-        db_platform.append('x')
-        db_email.append('xx')
-        db_pw.append('xxx')
-        db_lastTimeChange.append('01-01-2000')
-        db_addInfo.append('4321')
-        saveClicked(db_platform,
-                    db_email,
-                    db_pw,
-                    db_lastTimeChange,
-                    db_addInfo)
-
-        # Error 1
-        errorCode = 1
-        erm.saveErrorLog(errorCode)
-
-    return db_fileExists_atStartUp
-
 def checkFileStatus():
-    readFile()
-    if db_fileExists and db_loaded.empty:
-        encrypted = True
-        errorCode = 6
-        erm.saveErrorLog(errorCode)
-    if db_fileExists and not db_loaded.empty:
-        encrypted = False
-    
-    db_fileStat[0] = db_fileExists
-    db_fileStat[1] = encrypted
+    print("[FUNCTION]     sub.checkFileStatus()")
+
+    fh.readFile()
+
+    fileExists = fh.fileExists.status
+    fileEncrypted = fh.fileEncrypted.status
+    db_fileStat[0] = fileExists
+    db_fileStat[1] = fileEncrypted
 
     return db_fileStat
 
@@ -80,7 +42,7 @@ def updateClicked(sort):
     global db_loaded
 
     rd.dslc()
-    readFile()
+    db_loaded = fh.readFile()
 
     if sort: table_content = sortTable()
     else: table_content = db_loaded
@@ -99,15 +61,12 @@ def sortTable():
     return sortedTable
 
 def maxEntry():
-    # checks the number of entries in the loaded dataframe
+    # returns the number of entries and the size of the loaded DF
     print("[FUNCTION]   sub.maxEntry()")
-    global db_loaded, db_fileExists
-    if db_fileExists:
-        table_maxEntry = len(db_loaded.axes[0])
-        table_size = db_loaded.size
-    else:
-        table_maxEntry = 0
-        table_size = 0
+    
+    table_maxEntry = fh.maxEntry.status
+    table_size = fh.tableSize.status
+
     return table_maxEntry, table_size
 
 def changeItem(cell, newValue, save):
@@ -162,23 +121,25 @@ def changeItem(cell, newValue, save):
 def saveClicked(db_platform, db_email, db_pw, db_lastTimeChange,
                 db_addInfo):
     print("[FUNCTION]   sub.saveClicked()")
-    global db_loaded, db_fileExists
+    global db_loaded
+
+    db_fileExists = fh.fileExists.status
 
     # only alter variables when database already existant
-    # in not, first line shall not be alterd
-    if db_fileExists:
-        db_lastTimeChange_f,dslc = rd.formating(db_lastTimeChange)
-        dslc = int(dslc)
-        db_dslc = []
-        db_dslc.append(dslc)
-        table_maxEntry, table_size = maxEntry()
-        db_id = table_maxEntry
-    else:
+    # if not, first line shall not be alterd
+    '''if db_fileExists:'''
+    db_lastTimeChange_f,dslc = rd.formating(db_lastTimeChange)
+    dslc = int(dslc)
+    db_dslc = []
+    db_dslc.append(dslc)
+    table_maxEntry, table_size = maxEntry()
+    db_id = table_maxEntry
+    '''else:
         db_id = []
         db_id.append(0)
         db_lastTimeChange_f = db_lastTimeChange
         db_dslc = []
-        db_dslc.append('0')
+        db_dslc.append('0')'''
 
     try:
         f = {"platform" : db_platform, "email" : db_email,

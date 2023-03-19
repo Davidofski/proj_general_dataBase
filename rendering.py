@@ -2,6 +2,7 @@ import pandas as pd
 import datetime
 import errormessage as erm
 import os
+import filehandling as fh
 
 db_fileName = "DB_PW.csv"
 entryTimeStamp = []
@@ -16,21 +17,12 @@ today_0 = datetime.date.today()
 def readFile():
     print("[FUNCTION]   rd.readFile()")
     global db_loaded
-    try:
-        path = (db_path)
-        # check if path and file existant
-        db_loaded = pd.read_csv(path, sep=";", index_col=[0])
-        print("[INFO]   Reading of file was successful.")
 
-    except:
-        db_loaded = {}
-        # Error 3
-        errorCode = 3
-        erm.saveErrorLog(errorCode)
+    db_loaded = fh.readFile()
 
-    # return error_code, error_message
 def formating(db_lastTimeChange):
     print("[FUNCTION]   rd.formating()")
+    print("[INFO]       function got handed over: ", db_lastTimeChange)
 
     # formating of date
     newContainer = {}
@@ -71,7 +63,7 @@ def dslc():
         x = 0
         for i in dslc_date:   
             date = str(i)
-            year = int(date[6:10])
+            year = int(date[8:10])
             month = int(date[3:5])
             day = int(date[:2])
             diff_days = calc_dslc(year, month, day)
@@ -89,8 +81,10 @@ def calc_dslc(past_year, past_month, past_day):
     print("[FUNCTION]   rd.calc_dslc")
     global today_0
 
-    print("DEBUG    year: ", past_year)
-    past = datetime.date(past_year,past_month,past_day)
+    print("[DEBUG]      today_0: ", today_0)
+
+    past = datetime.date(past_year + 2000, past_month, past_day)
+    print("[DEBUG]      past: ", past)
     delta = today_0 - past
     diff_days = delta.days
 

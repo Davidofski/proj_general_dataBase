@@ -43,7 +43,8 @@ module_errorLog = cD + r"\showErrorLog.pyw"
 
 # saves new entry to database 
 def saveClicked():
-    global db_fileName, table_updateClicked
+    global db_fileName
+    global table_updateClicked
 
     # append new list item into container
     # in this proj always only one item per container
@@ -78,12 +79,16 @@ def saveClicked():
 
 # saves changes made in the table to database; new entry is disbled
 def saveChangesClicked():
-    global edditedCells, table_updateClicked
+    global edditedCells
+    global table_updateClicked
+
     savingMessage = False
+
     for cell in edditedCells:
         newValue = dpg.get_value(cell)
         savingError = sub.changeItem(cell, newValue, False)
         if savingError: savingMessage = True
+
     savingError = sub.changeItem(None, None, True)
     dpg.configure_item(b_saveNew, show=True, enabled=True)
     table_updateClicked = True
@@ -98,8 +103,11 @@ def saveChangesClicked():
 
 # update table, so changes are visible
 def updateClicked(sortTable):
-    global table_content, table_maxEntry, table_updateClicked
+    global table_content
+    global table_maxEntry
+    global table_updateClicked
     global table_size
+
     table_content = sub.updateClicked(sortTable)
     table_maxEntry, table_size = sub.maxEntry()
     # table_updateClicked = True
@@ -174,6 +182,7 @@ def checkFileStat():
 # failure at start-up with building a table in window 2.
 # Failure in maxEntrys would occur otherwise
 db_fileStat = checkFileStat()
+print("[DEBUG]      db_fileStatus: ", db_fileStat)
 
 # load db into table_content the first time only if file not encrypted
 if not db_fileStat[1]:

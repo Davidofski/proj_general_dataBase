@@ -9,22 +9,45 @@ cD = os.getcwd()
 fileName = "DB_PW.csv"
 path = cD + r"\%s" %fileName
 
+class fileStatus:
+
+    def __init__(self) -> None:
+        pass
+
+    def setStatus(self, status):
+        self.status = status
+
+fileExists = fileStatus()
+fileEncrypted = fileStatus()
+maxEntry = fileStatus()
+tableSize = fileStatus()
+
+fileExists.setStatus(None)
+fileEncrypted.setStatus(None)
+
 # check if file existant
 # returs boolean
-def checkFile():
-    print("""[INFO]       Module:   filehandling;
-           Funktion:   checkFile()""")
-    fileExists = os.path.isfile(path)
-    return fileExists
 
 def readFile():
-    print("""[INFO]     Modul:  filehandling
-           Function:   readFile()""")
-    fileExists = checkFile()
+    global db_loaded
 
-    if fileExists:
-        try: db_loaded = pd.read_csv(path, sep=";", index_col=[0])
-        except: print("[Exception]      in readFile()")
+    print("""[INFO]     Modul:  filehandling
+             Function:   readFile()""")
+    
+    fileExists.setStatus(os.path.isfile(path))
+
+    if fileExists.status:
+
+        # reading file and create dataframe id possible.
+        # if not possible, then file is encrypted
+        try:
+            db_loaded = pd.read_csv(path, sep=";", index_col=[0])
+
+            if db_loaded.empty: fileEncrypted.status(True)
+            maxEntry.setStatus(len(db_loaded.axes[0]))
+            tableSize.setStatus(db_loaded.size)
+        except:
+            print("[Exception]      in readFile()")
     else:
         _id = []
         platform = []
@@ -59,3 +82,5 @@ def saveFile(db_toSave):
     except:
         print("[Exception]      in saveFile()")
         erm.saveErrorLog(2)
+
+readFile()
