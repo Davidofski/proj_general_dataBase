@@ -43,7 +43,8 @@ module_errorLog = cD + r"\showErrorLog.pyw"
 
 # saves new entry to database 
 def saveClicked():
-    global db_fileName, table_updateClicked
+    global db_fileName
+    global table_updateClicked
 
     # append new list item into container
     # in this proj always only one item per container
@@ -78,12 +79,16 @@ def saveClicked():
 
 # saves changes made in the table to database; new entry is disbled
 def saveChangesClicked():
-    global edditedCells, table_updateClicked
+    global edditedCells
+    global table_updateClicked
+
     savingMessage = False
+
     for cell in edditedCells:
         newValue = dpg.get_value(cell)
         savingError = sub.changeItem(cell, newValue, False)
         if savingError: savingMessage = True
+
     savingError = sub.changeItem(None, None, True)
     dpg.configure_item(b_saveNew, show=True, enabled=True)
     table_updateClicked = True
@@ -98,8 +103,11 @@ def saveChangesClicked():
 
 # update table, so changes are visible
 def updateClicked(sortTable):
-    global table_content, table_maxEntry, table_updateClicked
+    global table_content
+    global table_maxEntry
+    global table_updateClicked
     global table_size
+
     table_content = sub.updateClicked(sortTable)
     table_maxEntry, table_size = sub.maxEntry()
     # table_updateClicked = True
@@ -206,9 +214,13 @@ with dpg.window(label="'%s' MANIPULATION" %db_fileName,
     if db_fileStat[0] and not db_fileStat[1]:
         w1_text1 = dpg.add_text("Reading in of file was sucessfull!",
                                 pos=(st.item2_xpos, st.item2_ypos))
-    else:
-        w1_text1 = dpg.add_text("File not found or encrypted!!",
+    elif db_fileStat[0] and db_fileStat[1]:
+        w1_text1 = dpg.add_text("File encrypted!!",
                                 color=[255,0,0],
+                                pos=(st.item3_xpos, st.item3_ypos))
+    else:
+        w1_text1 = dpg.add_text("File does not exist!! - New file created.",
+                                color=[255,200,0],
                                 pos=(st.item3_xpos, st.item3_ypos))
 
     # Window 1 input fields
@@ -253,7 +265,7 @@ with dpg.window(label="'%s' MANIPULATION" %db_fileName,
     b_openErrorLog = dpg.add_button(label="OPEN error log",
                                     callback=openErorLog,
                                     pos=(st.item22_xpos, st.item22_ypos))
-    b_sortEntrys = dpg.add_button(label="Sort after DSLC or platform",
+    b_sortEntrys = dpg.add_button(label="Sort after DSLC or email",
                                   callback=sortClicked,
                                   pos=(st.item23_xpos, st.item23_ypos))
     b_saveChanges = dpg.add_button(label="SAVE changes to '%s'" %db_fileName,
@@ -372,7 +384,14 @@ while dpg.is_dearpygui_running():
     if db_fileStat[1] and not timerStarted0:
         timerStarted0 = True
         startTime0 = time.time()
-    if db_fileStat[1] and timerStarted0 and time.time() - startTime0 > 5:
+    
+    if db_fileStat[0] and not db_fileStat[1]:
+        dpg.set_value(w1_text1, 'Reading file was sucessfull.')
+
+    if (db_fileStat[0]
+        and db_fileStat[1]
+        and timerStarted0
+        and time.time() - startTime0 > 5):
         db_fileStat = sub.checkFileStatus()
         if not db_fileStat[1]:
             table_updateClicked = True

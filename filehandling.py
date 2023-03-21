@@ -1,5 +1,3 @@
-# loading and writing of file for other modules
-
 import os
 import pandas as pd
 import errormessage as erm
@@ -9,22 +7,49 @@ cD = os.getcwd()
 fileName = "DB_PW.csv"
 path = cD + r"\%s" %fileName
 
+class fileStatus:
+
+    def __init__(self, name):
+        self.name = name
+
+    def setStatus(self, status):
+        self.status = status
+
+fileExists = fileStatus("file exists")
+fileEncrypted = fileStatus("file encrypted")
+maxEntry = fileStatus("max entry")
+tableSize = fileStatus("table size")
+
+fileExists.setStatus(False)
+fileEncrypted.setStatus(False)
+maxEntry.setStatus(0)
+tableSize.setStatus(0)
+
 # check if file existant
 # returs boolean
-def checkFile():
-    print("""[INFO]       Module:   filehandling;
-           Funktion:   checkFile()""")
-    fileExists = os.path.isfile(path)
-    return fileExists
 
 def readFile():
-    print("""[INFO]     Modul:  filehandling
-           Function:   readFile()""")
-    fileExists = checkFile()
+    global db_loaded
 
-    if fileExists:
-        try: db_loaded = pd.read_csv(path, sep=";", index_col=[0])
-        except: print("[Exception]      in readFile()")
+    print("""[INFO]     Modul:  filehandling
+             Function:   readFile()""")
+    
+    fileExists.setStatus(os.path.isfile(path))
+
+    if fileExists.status:
+
+        # reading file and create dataframe id possible.
+        # if not possible, then file is encrypted
+        try:
+            db_loaded = pd.read_csv(path, sep=";", index_col=[0])
+
+            if db_loaded.empty: fileEncrypted.setStatus(True)
+            else: fileEncrypted.setStatus(False)
+            maxEntry.setStatus(len(db_loaded.axes[0]))
+            tableSize.setStatus(db_loaded.size)
+        except:
+            print("[Exception]      in readFile()")
+
     else:
         _id = []
         platform = []
@@ -48,6 +73,11 @@ def readFile():
         db_loaded = pd.DataFrame(df, index=[_id])
         erm.saveErrorLog(1)
 
+        fileExists.setStatus(False)
+        fileEncrypted.setStatus(False)
+        maxEntry.setStatus(1)
+        tableSize.setStatus(0)
+
     return db_loaded
 
 def saveFile(db_toSave):
@@ -59,3 +89,5 @@ def saveFile(db_toSave):
     except:
         print("[Exception]      in saveFile()")
         erm.saveErrorLog(2)
+
+readFile()
