@@ -1,4 +1,4 @@
-import sandbox
+import filehandling as fh
 
-variable = sandbox.p1.age
-print(variable)
+somevar = fh.fileExists.status
+print(somevar)

@@ -182,7 +182,6 @@ def checkFileStat():
 # failure at start-up with building a table in window 2.
 # Failure in maxEntrys would occur otherwise
 db_fileStat = checkFileStat()
-print("[DEBUG]      db_fileStatus: ", db_fileStat)
 
 # load db into table_content the first time only if file not encrypted
 if not db_fileStat[1]:
@@ -215,9 +214,13 @@ with dpg.window(label="'%s' MANIPULATION" %db_fileName,
     if db_fileStat[0] and not db_fileStat[1]:
         w1_text1 = dpg.add_text("Reading in of file was sucessfull!",
                                 pos=(st.item2_xpos, st.item2_ypos))
-    else:
-        w1_text1 = dpg.add_text("File not found or encrypted!!",
+    elif db_fileStat[0] and db_fileStat[1]:
+        w1_text1 = dpg.add_text("File encrypted!!",
                                 color=[255,0,0],
+                                pos=(st.item3_xpos, st.item3_ypos))
+    else:
+        w1_text1 = dpg.add_text("File does not exist!! - New file created.",
+                                color=[255,200,0],
                                 pos=(st.item3_xpos, st.item3_ypos))
 
     # Window 1 input fields
@@ -262,7 +265,7 @@ with dpg.window(label="'%s' MANIPULATION" %db_fileName,
     b_openErrorLog = dpg.add_button(label="OPEN error log",
                                     callback=openErorLog,
                                     pos=(st.item22_xpos, st.item22_ypos))
-    b_sortEntrys = dpg.add_button(label="Sort after DSLC or platform",
+    b_sortEntrys = dpg.add_button(label="Sort after DSLC or email",
                                   callback=sortClicked,
                                   pos=(st.item23_xpos, st.item23_ypos))
     b_saveChanges = dpg.add_button(label="SAVE changes to '%s'" %db_fileName,
@@ -381,7 +384,14 @@ while dpg.is_dearpygui_running():
     if db_fileStat[1] and not timerStarted0:
         timerStarted0 = True
         startTime0 = time.time()
-    if db_fileStat[1] and timerStarted0 and time.time() - startTime0 > 5:
+    
+    if db_fileStat[0] and not db_fileStat[1]:
+        dpg.set_value(w1_text1, 'Reading file was sucessfull.')
+
+    if (db_fileStat[0]
+        and db_fileStat[1]
+        and timerStarted0
+        and time.time() - startTime0 > 5):
         db_fileStat = sub.checkFileStatus()
         if not db_fileStat[1]:
             table_updateClicked = True

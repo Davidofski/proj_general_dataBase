@@ -51,19 +51,21 @@ def updateClicked(sort):
 def sortTable():
     global db_loaded, sortUnsort
     if sortUnsort:
-        sortedTable = db_loaded.sort_values(by=['platform'],
+        sortedTable = db_loaded.sort_values(by=['email'],
                                             ascending=True)
+        print("[INFO]       table sorted after 'email'")
         sortUnsort = False
     else:
         sortedTable = db_loaded.sort_values(by=['DSLC'],
                                             ascending=False)
+        print("[INFO]       table sorted after 'DSLC'")
         sortUnsort = True
     return sortedTable
 
 def maxEntry():
     # returns the number of entries and the size of the loaded DF
     print("[FUNCTION]   sub.maxEntry()")
-    
+
     table_maxEntry = fh.maxEntry.status
     table_size = fh.tableSize.status
 
@@ -115,9 +117,6 @@ def changeItem(cell, newValue, save):
 
     print("[BUILD]  db_loaded:\n", db_loaded)
 
-
-    
-
 def saveClicked(db_platform, db_email, db_pw, db_lastTimeChange,
                 db_addInfo):
     print("[FUNCTION]   sub.saveClicked()")
@@ -142,11 +141,13 @@ def saveClicked(db_platform, db_email, db_pw, db_lastTimeChange,
         db_dslc.append('0')'''
 
     try:
-        f = {"platform" : db_platform, "email" : db_email,
+        f = {"platform" : db_platform,
+             "email" : db_email,
              "password" : db_pw,
              "last time changed" : db_lastTimeChange_f,
              "additional information" : db_addInfo,
              "DSLC" : db_dslc}
+        
         db_new = pd.DataFrame(f, index=[db_id])
 
         if db_fileExists:

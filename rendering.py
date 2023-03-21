@@ -22,7 +22,6 @@ def readFile():
 
 def formating(db_lastTimeChange):
     print("[FUNCTION]   rd.formating()")
-    print("[INFO]       function got handed over: ", db_lastTimeChange)
 
     # formating of date
     newContainer = {}
@@ -81,10 +80,7 @@ def calc_dslc(past_year, past_month, past_day):
     print("[FUNCTION]   rd.calc_dslc")
     global today_0
 
-    print("[DEBUG]      today_0: ", today_0)
-
     past = datetime.date(past_year + 2000, past_month, past_day)
-    print("[DEBUG]      past: ", past)
     delta = today_0 - past
     diff_days = delta.days
 

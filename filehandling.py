@@ -1,5 +1,3 @@
-# loading and writing of file for other modules
-
 import os
 import pandas as pd
 import errormessage as erm
@@ -11,19 +9,21 @@ path = cD + r"\%s" %fileName
 
 class fileStatus:
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, name):
+        self.name = name
 
     def setStatus(self, status):
         self.status = status
 
-fileExists = fileStatus()
-fileEncrypted = fileStatus()
-maxEntry = fileStatus()
-tableSize = fileStatus()
+fileExists = fileStatus("file exists")
+fileEncrypted = fileStatus("file encrypted")
+maxEntry = fileStatus("max entry")
+tableSize = fileStatus("table size")
 
-fileExists.setStatus(None)
-fileEncrypted.setStatus(None)
+fileExists.setStatus(False)
+fileEncrypted.setStatus(False)
+maxEntry.setStatus(0)
+tableSize.setStatus(0)
 
 # check if file existant
 # returs boolean
@@ -43,11 +43,13 @@ def readFile():
         try:
             db_loaded = pd.read_csv(path, sep=";", index_col=[0])
 
-            if db_loaded.empty: fileEncrypted.status(True)
+            if db_loaded.empty: fileEncrypted.setStatus(True)
+            else: fileEncrypted.setStatus(False)
             maxEntry.setStatus(len(db_loaded.axes[0]))
             tableSize.setStatus(db_loaded.size)
         except:
             print("[Exception]      in readFile()")
+
     else:
         _id = []
         platform = []
@@ -70,6 +72,11 @@ def readFile():
              "DSLC" : dslc}
         db_loaded = pd.DataFrame(df, index=[_id])
         erm.saveErrorLog(1)
+
+        fileExists.setStatus(False)
+        fileEncrypted.setStatus(False)
+        maxEntry.setStatus(1)
+        tableSize.setStatus(0)
 
     return db_loaded
 
