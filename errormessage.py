@@ -47,24 +47,25 @@ def alterlog():
 
     if fileExists:
         for errorCode in log_content["error code"]:
-            if errorCode == 1:
-                errorLog.append(em1)
-            elif errorCode == 2:
-                errorLog.append(em2)
-            elif errorCode == 3:
-                errorLog.append(em3)
-            elif errorCode == 4:
-                errorLog.append(em4)
-            elif errorCode == 5:
-                errorLog.append(em5)
-            elif errorCode == 6:
-                errorLog.append(em6)
-            elif errorCode == 7:
-                errorLog.append(em7)
-            elif errorCode == 8:
-                errorLog.append(em8)
-            else:
-                errorLog.append("...")
+            match errorCode:
+                case 1:
+                    errorLog.append(em1)
+                case 2:
+                    errorLog.append(em2)
+                case 3:
+                    errorLog.append(em3)
+                case 4:
+                    errorLog.append(em4)
+                case 5:
+                    errorLog.append(em5)
+                case 6:
+                    errorLog.append(em6)
+                case 7:
+                    errorLog.append(em7)
+                case 8:
+                    errorLog.append(em8)
+                case other:
+                    errorLog.append("...")
 
         log_content["message"] = errorLog
         log_content = log_content.drop(columns=['error code'], axis=0)

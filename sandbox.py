@@ -70,3 +70,11 @@ today = datetime.date.today()
 delta = today - past
 diff = delta.days
 print("Diff days: ", diff)
+
+testvar = 10
+
+match testvar:
+    case 1:
+        print("Null")
+    case 10:
+        print("Works")
